@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.phoenix.read.common.*;
 import com.phoenix.read.config.YmlConfig;
+import com.phoenix.read.controller.request.UpdateUserRequest;
 import com.phoenix.read.dto.BriefUser;
 import com.phoenix.read.dto.SessionData;
 import com.phoenix.read.dto.WxSession;
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
                 .sessionKey(wxSession.getSessionKey())
                 .sessionId(sessionId)
                 .type(0)
+                .isMute(0)
                 .nickname("花狮用户")
                 .build();
 
@@ -86,6 +88,16 @@ public class UserServiceImpl implements UserService {
         if(userMapper.selectByPrimaryKey(adminId).getType()!=2) throw new CommonException(CommonErrorCode.USER_NOT_SUPERADMIN);
         if(userMapper.selectByPrimaryKey(userId).getType()!=0) throw new CommonException(CommonErrorCode.USER_IS_ADMIN);
         userMapper.toAdmin(1,userId);
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userMapper.selectByPrimaryKey(userId);
+    }
+
+    @Override
+    public void UpdateUser(Long userId, UpdateUserRequest updateUserRequest) {
+        userMapper.updateUser(updateUserRequest.getNickname(),updateUserRequest.getDepartment(),updateUserRequest.getMajor(),updateUserRequest.getGrade(),updateUserRequest.getTelephone(),updateUserRequest.getQQ(),updateUserRequest.getWechatNum(),updateUserRequest.getPortrait(),userId);
     }
 
 

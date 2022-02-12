@@ -1,6 +1,7 @@
 package com.phoenix.read.controller;
 
 import com.phoenix.read.annotation.Auth;
+import com.phoenix.read.common.CommonException;
 import com.phoenix.read.common.Result;
 import com.phoenix.read.controller.request.CommentRequest;
 import com.phoenix.read.controller.request.NewPushRequest;
@@ -49,6 +50,11 @@ public class CommentController {
     @ApiOperation(value = "评论", response = String.class)
     public Result getCommentsById(@NotNull @Valid @RequestBody CommentRequest commentRequest) {
         Long userId=sessionUtils.getUserId();
-        return Result.success(commentService.addComment(commentRequest,userId));
+        try{
+            return Result.success(commentService.addComment(commentRequest,userId));
+        }catch (CommonException e){
+            return Result.result(e.getCommonErrorCode());
+        }
+
     }
 }

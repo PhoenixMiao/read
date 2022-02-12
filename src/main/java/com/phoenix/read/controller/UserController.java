@@ -3,6 +3,7 @@ package com.phoenix.read.controller;
 import com.phoenix.read.annotation.Auth;
 import com.phoenix.read.common.CommonException;
 import com.phoenix.read.common.Result;
+import com.phoenix.read.controller.request.UpdateUserRequest;
 import com.phoenix.read.dto.BriefUser;
 import com.phoenix.read.dto.SessionData;
 import com.phoenix.read.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -66,5 +68,20 @@ public class UserController {
         }catch (CommonException e){
             return Result.result(e.getCommonErrorCode(),userId);
         }
+    }
+
+    @Auth
+    @GetMapping("")
+    @ApiOperation(value = "获取个人信息")
+    public Result getUserById(){
+        return Result.success(userService.getUserById(sessionUtils.getUserId()));
+    }
+
+    @Auth
+    @PostMapping("/change")
+    @ApiOperation(value = "更新用户信息")
+    public Result updateUser(@NotNull @Valid @RequestBody UpdateUserRequest updateUserRequest){
+        userService.UpdateUser(sessionUtils.getUserId(),updateUserRequest);
+        return Result.success("ok");
     }
 }

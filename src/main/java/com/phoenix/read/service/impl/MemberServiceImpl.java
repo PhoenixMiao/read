@@ -92,19 +92,21 @@ public class MemberServiceImpl implements MemberService {
 class MemberThead {
     private String timeStamp;
     private int type;
-    private Long activityId;
+    private Long id;
 
     public void updateStatus() {
         try {
             SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date parse = mDateFormat.parse(timeStamp);
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(parse);
+            if(type==2) calendar.add(Calendar.DAY_OF_MONTH,3);
+            else calendar.setTime(parse);
             Date time = calendar.getTime();
             Timer timer = new Timer();
-            if(type==0) timer.schedule(new OrderStart(activityId), time);
-            else if(type==1) timer.schedule(new ActivityStart(activityId),time);
-            else if(type==-1) timer.schedule(new ActivityEnd(activityId),time);
+            if(type==0) timer.schedule(new OrderStart(id), time);
+            else if(type==1) timer.schedule(new ActivityStart(id),time);
+            else if(type==-1) timer.schedule(new ActivityEnd(id),time);
+            else if(type==2) timer.schedule(new Mute(id),time);
         }catch (ParseException e){
             e.printStackTrace();
         }
@@ -166,5 +168,21 @@ class ActivityEnd extends TimerTask {
                 memberMapper.updateStatus(-1,ele.getId());
             }
         }
+    }
+}
+
+class Mute extends TimerTask {
+
+    @Autowired
+    private UserMapper userMapper;
+
+    private Long id;
+
+    public Mute(Long id){
+        this.id = id;
+    }
+
+    public void run() {
+        userMapper.muteUser(0,id);
     }
 }

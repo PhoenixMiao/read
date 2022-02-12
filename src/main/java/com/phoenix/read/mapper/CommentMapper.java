@@ -5,6 +5,7 @@ import com.phoenix.read.dto.BriefPassage;
 import com.phoenix.read.entity.Comment;
 import com.phoenix.read.entity.Organizer;
 import io.swagger.models.auth.In;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -24,4 +25,5 @@ public interface CommentMapper extends MyMapper<Comment> {
                     @Param("commentTime") String commentTime,
                     @Param("comment") String comment
                     );
+
 }

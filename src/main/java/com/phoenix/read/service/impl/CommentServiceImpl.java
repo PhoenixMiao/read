@@ -1,8 +1,11 @@
 package com.phoenix.read.service.impl;
 
+import com.phoenix.read.common.CommonErrorCode;
+import com.phoenix.read.common.CommonException;
 import com.phoenix.read.controller.request.CommentRequest;
 import com.phoenix.read.entity.Comment;
 import com.phoenix.read.mapper.CommentMapper;
+import com.phoenix.read.mapper.UserMapper;
 import com.phoenix.read.service.CommentService;
 import com.phoenix.read.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private TimeUtil timeUtil;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public Comment getCommentById(Long id){
         Comment comment=commentMapper.selectByPrimaryKey(id);
@@ -31,14 +37,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public String addComment(CommentRequest commentRequest,Long userId){
+    public Long addComment(CommentRequest commentRequest,Long userId){
         if(commentRequest.getObjectType().equals(1)){
             Comment comment=commentMapper.selectByPrimaryKey(commentRequest.getObjectId());
             if(comment.getObjectType().equals(1)){
-                return "不能评论此评论";
+                throw new CommonException(CommonErrorCode.COMMENT_IS_NOT_ALLOWED);
             }
         }
-        commentMapper.addComment(commentRequest.getObjectId(),commentRequest.getObjectType(),userId,timeUtil.getCurrentTimestamp(),commentRequest.getComment());
-        return "评论成功";
+        if(userMapper.selectByPrimaryKey(userId).getIsMute()==1){
+            throw new CommonException(CommonErrorCode.USER_IS_MUTE);
+        }
+        return commentMapper.addComment(commentRequest.getObjectId(),commentRequest.getObjectType(),userId,timeUtil.getCurrentTimestamp(),commentRequest.getComment());
     }
 }

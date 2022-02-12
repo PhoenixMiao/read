@@ -28,6 +28,8 @@ public enum CommonErrorCode {
     SELF_INFORMATION_UNWRITTEN(2007,"用户信息不完整，请先完善姓名、学号、院系、专业、年级等信息再进行操作","用户信息不完整，请先完善姓名、学号、院系、专业、年级等信息再进行操作"),
     USER_NOT_SUPERADMIN(2008,"用户不是超级管理员","用户不是超级管理员"),
     USER_IS_ADMIN(2009,"用户已经是管理员了","用户已经是管理员了"),
+    USER_IS_MUTE(2010,"用户正在禁言中","用户正在禁言中"),
+    COMMENT_IS_NOT_ALLOWED(2011,"不能对二级评论进行评论","不能对二级评论进行评论"),
     ;
 
     /**

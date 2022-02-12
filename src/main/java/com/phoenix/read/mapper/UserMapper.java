@@ -23,4 +23,10 @@ public interface UserMapper extends MyMapper<User> {
 
     @Update("UPDATE user SET type=#{type} WHERE id=#{id}")
     void toAdmin(@Param("type")Integer type,@Param("id")Long id);
+
+    @Update("UPDATE user SET nickname=#{nickname},department=#{department},major=#{major},grade=#{grade},telephone=#{telephone},QQ=#{QQ},wechatNum=#{wechatNum},portrait=#{portrait} WHERE id=#{id};")
+    void updateUser(@Param("nickname")String nickname,@Param("department")String department,@Param("major")String major,@Param("grade")String grade,@Param("telephone")String telephone,@Param("QQ")String QQ,@Param("wechatNum")String wechatNum,@Param("portrait")String portrait,@Param("id")Long id);
+
+    @Update("UPDATE user SET isMute=#{isMute} WHERE id=#{id}")
+    void muteUser(@Param("isMute")Integer isMute,@Param("id")Long id);
 }

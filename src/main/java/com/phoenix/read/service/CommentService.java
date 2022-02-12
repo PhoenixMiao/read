@@ -16,7 +16,7 @@ public interface CommentService {
 
     Comment getCommentById(Long id);
 
-    String addComment(CommentRequest commentRequest,Long userId);
+    Long addComment(CommentRequest commentRequest,Long userId);
 
     List<Long> getItsCommentsIdById(Long commentId);
 }

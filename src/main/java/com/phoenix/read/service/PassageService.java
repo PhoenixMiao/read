@@ -15,5 +15,5 @@ public interface PassageService {
 
     GetPassageResponse getPassageById(Long passageId);
 
-    String postNewPassage(PostRequest postRequest,Long userId);
+    Long postNewPassage(PostRequest postRequest,Long userId);
 }

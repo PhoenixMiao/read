@@ -52,6 +52,11 @@ public class PassageController {
     @ApiOperation(value = "发布新贴", response = String.class)
     public Result  postNewPassage(@NotNull @Valid @RequestBody PostRequest postRequest){
         Long userId=sessionUtils.getUserId();
-        return Result.success(passageService.postNewPassage(postRequest,userId));
+        try{
+            return Result.success(passageService.postNewPassage(postRequest,userId));
+        }catch (CommonException e){
+            return Result.result(e.getCommonErrorCode(),userId);
+        }
+
     }
 }

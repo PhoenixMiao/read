@@ -39,14 +39,14 @@ public class User {
     @ApiModelProperty("创建时间")
     private String createTime;
 
-    @ApiModelProperty("昵称")
-    private String nickname;
-
     @ApiModelProperty("性别")
     private Integer gender;
 
     @ApiModelProperty("真实姓名")
     private String name;
+
+    @ApiModelProperty("昵称")
+    private String nickname;
 
     @ApiModelProperty("学院")
     private String department;
@@ -74,5 +74,8 @@ public class User {
 
     @ApiModelProperty("类型")
     private Integer type;
+
+    @ApiModelProperty("禁言与否（1为禁言，0为未禁言）")
+    private Integer isMute;
 
 }

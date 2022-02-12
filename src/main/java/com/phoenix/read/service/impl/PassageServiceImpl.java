@@ -1,5 +1,7 @@
 package com.phoenix.read.service.impl;
 
+import com.phoenix.read.common.CommonErrorCode;
+import com.phoenix.read.common.CommonException;
 import com.phoenix.read.controller.request.GetPassageListRequest;
 import com.phoenix.read.controller.request.PostRequest;
 import com.phoenix.read.controller.response.GetPassageResponse;
@@ -7,6 +9,7 @@ import com.phoenix.read.dto.BriefPassage;
 import com.phoenix.read.entity.Passage;
 import com.phoenix.read.mapper.CommentMapper;
 import com.phoenix.read.mapper.PassageMapper;
+import com.phoenix.read.mapper.UserMapper;
 import com.phoenix.read.service.PassageService;
 import com.phoenix.read.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,9 @@ public class PassageServiceImpl implements PassageService {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private TimeUtil timeUtil;
@@ -40,9 +46,9 @@ public class PassageServiceImpl implements PassageService {
     }
 
     @Override
-    public String postNewPassage(PostRequest postRequest,Long userId){
+    public Long postNewPassage(PostRequest postRequest,Long userId){
+        if(userMapper.selectByPrimaryKey(userId).getIsMute()==1) throw new CommonException(CommonErrorCode.USER_IS_MUTE);
         Passage passage=new Passage(null,postRequest.getType(),postRequest.getSubtype(),userId,postRequest.getContent(),timeUtil.getCurrentTimestamp(),postRequest.getTitle());
-        passageMapper.insert(passage);
-        return "发帖成功";
+        return (long) passageMapper.insert(passage);
     }
 }
