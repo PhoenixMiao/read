@@ -2,11 +2,9 @@ package com.phoenix.read.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.phoenix.read.common.CommonConstants;
-import com.phoenix.read.common.CommonErrorCode;
-import com.phoenix.read.common.Page;
-import com.phoenix.read.common.PageParam;
+import com.phoenix.read.common.*;
 import com.phoenix.read.config.YmlConfig;
+import com.phoenix.read.dto.BriefUser;
 import com.phoenix.read.dto.SessionData;
 import com.phoenix.read.dto.WxSession;
 import com.phoenix.read.entity.User;
@@ -74,6 +72,20 @@ public class UserServiceImpl implements UserService {
 
 
         return new SessionData(user);
+    }
+
+    @Override
+    public Page<BriefUser> getBriefUserList(int pageSize, int pageNum,Long userId) {
+        if(userMapper.selectByPrimaryKey(userId).getType()!=2) throw new CommonException(CommonErrorCode.USER_NOT_SUPERADMIN);
+        PageHelper.startPage(pageNum,pageSize,"id asc");
+        return new Page<>(new PageInfo<>(userMapper.getBriefUser()));
+    }
+
+    @Override
+    public void toAdmin(Long userId,Long adminId) {
+        if(userMapper.selectByPrimaryKey(adminId).getType()!=2) throw new CommonException(CommonErrorCode.USER_NOT_SUPERADMIN);
+        if(userMapper.selectByPrimaryKey(userId).getType()!=0) throw new CommonException(CommonErrorCode.USER_IS_ADMIN);
+        userMapper.toAdmin(1,userId);
     }
 
 
