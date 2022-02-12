@@ -1,23 +1,18 @@
-package com.phoenix.read.entity;
+package com.phoenix.read.controller.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@ApiModel("Passage 帖子")
-public class Passage {
-    @Id
-    @ApiModelProperty("id")
-    private Long id;
+@ApiModel("PostRequest 发帖请求")
+public class PostRequest {
 
     @ApiModelProperty("类别 1:交流 2:答疑 3:综合")
     private Integer type;
@@ -25,14 +20,8 @@ public class Passage {
     @ApiModelProperty("子类别 1:人文艺术 2:社会科学 3:自然科学")
     private Integer subtype;
 
-    @ApiModelProperty("编写用户id")
-    private Long userId;
-
     @ApiModelProperty("正文")
     private String content;
-
-    @ApiModelProperty("发布时间")
-    private String publishTime;
 
     @ApiModelProperty("标题")
     private String title;

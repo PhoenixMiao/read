@@ -1,4 +1,5 @@
-package com.phoenix.read.entity;
+package com.phoenix.read.controller.request;
+
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,24 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@ApiModel("comment 评论记录")
-
-public class Comment {
-    @Id
-    @ApiModelProperty("id")
-    private Long id;
-
-    @ApiModelProperty("评论用户")
-    private Long userId;
-
-    @ApiModelProperty("类别")
+@ApiModel("CommentRequest 请求评论")
+public class CommentRequest {
+    @ApiModelProperty("对象类别 0帖子 1评论")
     private Integer objectType;
 
     @ApiModelProperty("评论内容")
@@ -31,8 +22,4 @@ public class Comment {
 
     @ApiModelProperty("评论对象的id")
     private Long objectId;
-
-    @ApiModelProperty("评论时间")
-    private String commentTime;
-
 }

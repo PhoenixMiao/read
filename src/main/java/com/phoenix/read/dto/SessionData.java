@@ -85,7 +85,6 @@ public class SessionData implements Serializable {
         create_time = user.getCreateTime();
         nickname = user.getNickname();
         gender = user.getGender();
-        school = user.getSchool();
         department = user.getDepartment();
         major = user.getMajor();
         grade = user.getGrade();

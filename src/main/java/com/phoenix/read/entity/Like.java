@@ -8,31 +8,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ApiModel("comment 评论记录")
-
-public class Comment {
+@ApiModel("Like 点赞记录")
+public class Like {
     @Id
     @ApiModelProperty("id")
     private Long id;
 
-    @ApiModelProperty("评论用户")
+    @ApiModelProperty("用户id")
     private Long userId;
 
-    @ApiModelProperty("类别")
-    private Integer objectType;
+    @ApiModelProperty("论坛id")
+    private Long passageId;
 
-    @ApiModelProperty("评论内容")
-    private String comment;
-
-    @ApiModelProperty("评论对象的id")
-    private Long objectId;
-
-    @ApiModelProperty("评论时间")
-    private String commentTime;
-
+    @ApiModelProperty("点赞时间")
+    private String likeTime;
 }
