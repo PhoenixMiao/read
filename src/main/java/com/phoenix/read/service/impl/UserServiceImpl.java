@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
         if(userMapper.selectByPrimaryKey(adminId).getType()!=2) throw new CommonException(CommonErrorCode.USER_NOT_SUPERADMIN);
         if(userMapper.selectByPrimaryKey(userId).getType()!=1) throw new CommonException(CommonErrorCode.USER_NOT_ADMIN);
         userMapper.toAdmin(0,userId);
+        userMapper.classifyUser(null,userId);
     }
 
     @Override
@@ -110,6 +111,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void classifyUser(Long organizerId, Long userId, Long adminId) {
         if(userMapper.selectByPrimaryKey(adminId).getType()!=2) throw new CommonException(CommonErrorCode.USER_NOT_SUPERADMIN);
+        if(userMapper.selectByPrimaryKey(userId).getType()!=1) throw new CommonException(CommonErrorCode.USER_NOT_ADMIN);
         userMapper.classifyUser(organizerId,userId);
     }
 

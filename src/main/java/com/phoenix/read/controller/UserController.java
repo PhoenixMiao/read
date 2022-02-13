@@ -66,7 +66,7 @@ public class UserController {
             userService.toAdmin(userId,sessionUtils.getUserId());
             return Result.success(userId);
         }catch (CommonException e){
-            return Result.result(e.getCommonErrorCode(),userId);
+            return Result.result(e.getCommonErrorCode());
         }
     }
 
@@ -94,7 +94,7 @@ public class UserController {
             userService.backToUser(userId,sessionUtils.getUserId());
             return Result.success(userId);
         }catch (CommonException e){
-            return Result.result(e.getCommonErrorCode(),userId);
+            return Result.result(e.getCommonErrorCode());
         }
     }
 
@@ -111,7 +111,7 @@ public class UserController {
             userService.classifyUser(organizerId,userId,sessionUtils.getUserId());
             return Result.success(userId);
         }catch (CommonException e){
-            return Result.result(e.getCommonErrorCode(),sessionUtils.getUserId());
+            return Result.result(e.getCommonErrorCode());
         }
     }
 }
