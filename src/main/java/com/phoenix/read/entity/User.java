@@ -78,4 +78,7 @@ public class User {
     @ApiModelProperty("禁言与否（1为禁言，0为未禁言）")
     private Integer isMute;
 
+    @ApiModelProperty("主办方id")
+    private Long organizerId;
+
 }

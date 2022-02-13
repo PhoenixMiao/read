@@ -1,6 +1,6 @@
 server:
   port: 8000
-  domain: https://www.xxxx.cn
+#  domain: https://www.xxxx.cn
 spring:
   http:
     encoding:

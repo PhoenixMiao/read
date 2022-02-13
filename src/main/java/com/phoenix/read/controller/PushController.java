@@ -7,11 +7,13 @@ import com.phoenix.read.common.CommonException;
 import com.phoenix.read.common.Result;
 import com.phoenix.read.controller.request.NewPushRequest;
 import com.phoenix.read.controller.response.NewPushResponse;
+import com.phoenix.read.dto.BriefPush;
 import com.phoenix.read.entity.Push;
 import com.phoenix.read.service.PushService;
 import com.phoenix.read.util.SessionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -61,5 +63,18 @@ public class PushController {
         }
     }
 
+
+    @GetMapping("/list")
+    @ApiOperation(value = "根据活动分类获取推送",response = BriefPush.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
+            @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "activityType",value = "主办方id",required = true,paramType = "query",dataType = "Long"),
+    })
+    public Result getBriefPushList(@NotNull @RequestParam("pageSize")Integer pageSize,
+                                   @NotNull @RequestParam("pageNum")Integer pageNum,
+                                   @NotNull @RequestParam("activityType")Integer activityType){
+        return Result.success(pushService.getPushListByActivityType(pageSize,pageNum,activityType));
+    }
 
 }

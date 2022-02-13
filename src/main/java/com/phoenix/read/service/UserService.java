@@ -19,7 +19,11 @@ public interface UserService {
 
     void toAdmin(Long userId,Long adminId);
 
+    void backToUser(Long userId,Long adminId);
+
     User getUserById(Long userId);
 
     void UpdateUser(Long userId, UpdateUserRequest updateUserRequest);
+
+    void classifyUser(Long organizerId,Long userId,Long adminId);
 }

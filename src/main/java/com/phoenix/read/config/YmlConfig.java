@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Data
 public class YmlConfig {
 
-    @Value("${server.domain}")
-    private String domain;
+//    @Value("${server.domain}")
+//    private String domain;
 
     @Value("${server.port}")
     private String port;
@@ -24,16 +24,16 @@ public class YmlConfig {
     @Value("${mini-app.app-secret}")
     private String appSecret;
 
-    @Value("${mini-app.mch-id}")
-    private String mchId;
-
-    @Value("${mini-app.mch-serial-no}")
-    private String mchSerialNo;
-
-    @Value("${mini-app.mch-private-key}")
-    private String mchPrivateKey;
-
-    @Value("${mini-app.apiV3-key}")
-    private String apiV3Key;
+//    @Value("${mini-app.mch-id}")
+//    private String mchId;
+//
+//    @Value("${mini-app.mch-serial-no}")
+//    private String mchSerialNo;
+//
+//    @Value("${mini-app.mch-private-key}")
+//    private String mchPrivateKey;
+//
+//    @Value("${mini-app.apiV3-key}")
+//    private String apiV3Key;
 
 }

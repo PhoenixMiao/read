@@ -25,6 +25,9 @@ public class Push {
     @ApiModelProperty("活动id")
     private Long activityId;
 
+    @ApiModelProperty("活动类型")
+    private Integer activityType;
+
     @ApiModelProperty("发布日期")
     private String publishDate;
 

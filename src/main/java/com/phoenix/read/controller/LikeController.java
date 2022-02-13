@@ -31,10 +31,10 @@ public class LikeController {
     @Auth
     @GetMapping("")
     @ApiOperation(value = "点赞", response = Long.class)
-    @ApiImplicitParam(name = "passagetId", value = "论坛id", required = true, paramType = "query", dataType = "Long")
-    public Result Like(@NotNull @RequestParam("passagetId") Long passagetId) {
+    @ApiImplicitParam(name = "passageId", value = "论坛id", required = true, paramType = "query", dataType = "Long")
+    public Result Like(@NotNull @RequestParam("passageId") Long passageId) {
         Long userId=sessionUtils.getUserId();
-        return Result.success(likeService.like(passagetId,userId));
+        return Result.success(likeService.like(passageId,userId));
     }
 
     @Auth

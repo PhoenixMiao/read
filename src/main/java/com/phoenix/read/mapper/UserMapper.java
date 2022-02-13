@@ -29,4 +29,7 @@ public interface UserMapper extends MyMapper<User> {
 
     @Update("UPDATE user SET isMute=#{isMute} WHERE id=#{id}")
     void muteUser(@Param("isMute")Integer isMute,@Param("id")Long id);
+
+    @Update("UPDATE user SET organizerId=#{organizerId} WHERE id=#{id}")
+    void classifyUser(@Param("organizerId")Long organizerId,@Param("id")Long id);
 }

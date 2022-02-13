@@ -91,6 +91,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void backToUser(Long userId, Long adminId) {
+        if(userMapper.selectByPrimaryKey(adminId).getType()!=2) throw new CommonException(CommonErrorCode.USER_NOT_SUPERADMIN);
+        if(userMapper.selectByPrimaryKey(userId).getType()!=1) throw new CommonException(CommonErrorCode.USER_NOT_ADMIN);
+        userMapper.toAdmin(0,userId);
+    }
+
+    @Override
     public User getUserById(Long userId) {
         return userMapper.selectByPrimaryKey(userId);
     }
@@ -98,6 +105,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void UpdateUser(Long userId, UpdateUserRequest updateUserRequest) {
         userMapper.updateUser(updateUserRequest.getNickname(),updateUserRequest.getDepartment(),updateUserRequest.getMajor(),updateUserRequest.getGrade(),updateUserRequest.getTelephone(),updateUserRequest.getQQ(),updateUserRequest.getWechatNum(),updateUserRequest.getPortrait(),userId);
+    }
+
+    @Override
+    public void classifyUser(Long organizerId, Long userId, Long adminId) {
+        if(userMapper.selectByPrimaryKey(adminId).getType()!=2) throw new CommonException(CommonErrorCode.USER_NOT_SUPERADMIN);
+        userMapper.classifyUser(organizerId,userId);
     }
 
 
