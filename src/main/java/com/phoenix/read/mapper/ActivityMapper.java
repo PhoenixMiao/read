@@ -18,9 +18,9 @@ public interface ActivityMapper extends MyMapper<Activity> {
     @Insert("INSERT INTO activity(type,publisherId) VALUES (#{type},#{publisherId});")
     Long newActivity(@Param("type")Integer type,@Param("publisherId")Long publisherId);
 
-    @Update("UPDATE activity SET name=#{name},status=#{status},organizerId=#{organizerId},startTime=#{startTime},endTime=#{endTime},place=#{place},time=#{time},orderStartTime=#{orderStartTime},orderEndTime=#{orderEndTime},people=#{people},introduction=#{introduction},isCheck=#{isCheck},version=#{version} WHERE id=#{id};")
+    @Update("UPDATE activity SET name=#{name},status=#{status},organizerId=#{organizerId},startTime=#{startTime},endTime=#{endTime},place=#{place},time=#{time},orderStartTime=#{orderStartTime},orderEndTime=#{orderEndTime},people=#{people},introduction=#{introduction},isCheck=#{isCheck} WHERE id=#{id};")
     void updateActivity(@Param("name")String name, @Param("status")Integer status,@Param("organizerId")Long organizerId,@Param("startTime")String startTime,@Param("endTime")String endTime,@Param("place")String place,@Param("time")Integer time,@Param("orderStartTime")String orderStartTime,@Param("orderEndTime")String orderEndTime,
-                        @Param("people")Integer people,@Param("introduction")String introduction,@Param("isCheck")Integer isCheck,@Param("version")Integer version);
+                        @Param("people")Integer people,@Param("introduction")String introduction,@Param("isCheck")Integer isCheck);
 
 
     @Select("SELECT * FROM activity WHERE id=#{id}")

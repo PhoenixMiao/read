@@ -185,6 +185,14 @@
 			<artifactId>janino</artifactId>
 			<version>3.0.6</version>
 		</dependency>
+
+<!--			&lt;!&ndash; https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter &ndash;&gt;-->
+<!--		<dependency>-->
+<!--				<groupId>com.baomidou</groupId>-->
+<!--				<artifactId>mybatis-plus-boot-starter</artifactId>-->
+<!--				<version>3.4.2</version>-->
+<!--		</dependency>-->
+
 	</dependencies>
 
 	<build>

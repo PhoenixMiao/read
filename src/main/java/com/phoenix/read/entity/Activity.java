@@ -17,7 +17,6 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Builder
 @ApiModel("activity 活动")
-
 public class Activity {
     @Id
     @ApiModelProperty("id")
@@ -56,7 +55,7 @@ public class Activity {
     @ApiModelProperty("预约结束时间")
     private String orderEndTime;
 
-    @ApiModelProperty("参与人数")
+    @ApiModelProperty("预约人数")
     private Integer people;
 
     @ApiModelProperty("活动简介")
@@ -64,4 +63,7 @@ public class Activity {
 
     @ApiModelProperty("是否签到")
     private Integer isCheck;
+
+    @ApiModelProperty("参与人数乐观锁组件")
+    private Integer version;
 }

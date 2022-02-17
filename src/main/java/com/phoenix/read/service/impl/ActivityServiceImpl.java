@@ -40,7 +40,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
         new MemberThead(updateActivityRequest.getStartTime(),1,updateActivityRequest.getId()).updateStatus();
         new MemberThead(updateActivityRequest.getEndTime(),-1,updateActivityRequest.getId()).updateStatus();
-        activityMapper.updateActivity(updateActivityRequest.getName(),status,updateActivityRequest.getOrganizerId(),updateActivityRequest.getStartTime(),updateActivityRequest.getEndTime(),updateActivityRequest.getPlace(), DatesUtil.hourDiff(updateActivityRequest.getStartTime(),updateActivityRequest.getEndTime()),updateActivityRequest.getOrderStartTime(),updateActivityRequest.getOrderEndTime(),0,updateActivityRequest.getIntroduction(),updateActivityRequest.getIsCheck(),1);
+        activityMapper.updateActivity(updateActivityRequest.getName(),status,updateActivityRequest.getOrganizerId(),updateActivityRequest.getStartTime(),updateActivityRequest.getEndTime(),updateActivityRequest.getPlace(), DatesUtil.hourDiff(updateActivityRequest.getStartTime(),updateActivityRequest.getEndTime()),updateActivityRequest.getOrderStartTime(),updateActivityRequest.getOrderEndTime(),0,updateActivityRequest.getIntroduction(),updateActivityRequest.getIsCheck());
     }
 
 
