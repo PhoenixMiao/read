@@ -20,7 +20,7 @@ public class Push {
     private Long id;
 
     @ApiModelProperty("标题")
-    private Long title;
+        private String title;
 
     @ApiModelProperty("活动id")
     private Long activityId;

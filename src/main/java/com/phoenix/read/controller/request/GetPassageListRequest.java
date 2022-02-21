@@ -18,4 +18,7 @@ public class GetPassageListRequest {
 
     @ApiModelProperty("子类别 1:人文艺术 2:社会科学 3:自然科学")
     private Integer subtype;
+
+    @ApiModelProperty("排序顺序 1:最新 2:热门")
+    private Integer order;
 }

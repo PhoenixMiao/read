@@ -19,7 +19,7 @@ public class BriefPassage {
     private Long id;
 
     @ApiModelProperty("编写用户id")
-    private String userId;
+    private Long userId;
 
     @ApiModelProperty("正文")
     private String content;

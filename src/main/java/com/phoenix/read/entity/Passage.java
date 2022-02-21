@@ -37,3 +37,4 @@ public class Passage {
     @ApiModelProperty("标题")
     private String title;
 }
+

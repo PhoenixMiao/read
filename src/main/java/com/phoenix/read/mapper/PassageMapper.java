@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface PassageMapper extends MyMapper<Passage> {
-    @Select("SELECT id,userId,content,title FROM passage WHERE type=#{type} AND subtype=#{subtype}")
-    List<BriefPassage> getPassageList(@Param("type") Integer type, @Param("subtype")Integer subtype);
+    @Select("SELECT * FROM passage WHERE type=#{type} AND subtype=#{subtype}")
+    List<Passage> getPassageList(@Param("type") Integer type, @Param("subtype")Integer subtype);
 }
 

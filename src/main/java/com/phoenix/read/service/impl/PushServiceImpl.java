@@ -6,6 +6,7 @@ import com.phoenix.read.common.CommonErrorCode;
 import com.phoenix.read.common.CommonException;
 import com.phoenix.read.common.Page;
 import com.phoenix.read.controller.request.NewPushRequest;
+import com.phoenix.read.controller.request.SearchRequest;
 import com.phoenix.read.controller.response.NewPushResponse;
 import com.phoenix.read.dto.BriefActivity;
 import com.phoenix.read.dto.BriefPush;
@@ -18,9 +19,11 @@ import com.phoenix.read.mapper.PushMapper;
 import com.phoenix.read.mapper.UserMapper;
 import com.phoenix.read.service.PushService;
 import com.phoenix.read.util.TimeUtil;
+import io.netty.channel.socket.ChannelOutputShutdownEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.swing.BakedArrayList;
+import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -38,6 +41,59 @@ public class PushServiceImpl implements PushService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Override
+    public Page<BriefPush> searchPush(SearchRequest searchRequest){
+        Example exampleOne = new Example(Push.class);
+
+        if (!StringUtils.isEmpty(searchRequest.getTitle())) {
+            Example.Criteria nameCriteria = exampleOne.createCriteria();
+            nameCriteria.orLike("title", "%" + searchRequest.getTitle() + "%");
+            exampleOne.and(nameCriteria);
+        }
+
+        PageHelper.startPage(searchRequest.getPageParam().getPageNum(),
+                searchRequest.getPageParam().getPageSize(),
+                searchRequest.getPageParam().getOrderBy());
+        List<Push> pushListOne = pushMapper.selectByExample(exampleOne);
+
+        Example exampleTwo = new Example(User.class);
+
+        if (!StringUtils.isEmpty(searchRequest.getPubisher())) {
+            Example.Criteria nameCriteria = exampleTwo.createCriteria();
+            nameCriteria.orLike("nickname", "%" + searchRequest.getPubisher() + "%");
+            exampleTwo.and(nameCriteria);
+        }
+        if (!StringUtils.isEmpty(searchRequest.getOrganizer())) {
+            Example.Criteria nameCriteria = exampleTwo.createCriteria();
+            nameCriteria.orLike("nickname", "%" + searchRequest.getPubisher() + "%");
+            exampleTwo.and(nameCriteria);
+        }
+        PageHelper.startPage(searchRequest.getPageParam().getPageNum(),
+                searchRequest.getPageParam().getPageSize(),
+                searchRequest.getPageParam().getOrderBy());
+        List<User> userList = userMapper.selectByExample(exampleTwo);
+        List<Long> activityIdList=new ArrayList<>();
+        for(User user:userList){
+            activityIdList.addAll(activityMapper.getRelevantActicityIdByUser(user.getId()));
+        }
+        List<Push> pushListTwo=new ArrayList<>();
+        for(Long activityId:activityIdList){
+            pushListTwo.addAll(pushMapper.getPushListByActivityId(activityId));
+        }
+
+        PageHelper.startPage(searchRequest.getPageParam().getPageNum(),
+                searchRequest.getPageParam().getPageSize(),
+                searchRequest.getPageParam().getOrderBy());
+        pushListOne.addAll(pushListTwo);
+        Page page = new Page(new PageInfo(pushListOne));
+
+        ArrayList<BriefPush> responseList = new ArrayList<>();
+        for (Push ele : pushListOne) {
+            responseList.add(new BriefPush(ele.getId(), ele.getTitle(), ele.getPicture(), ele.getType(), ele.getActivityId(), ele.getActivityType()));
+        }
+        return new Page<>(searchRequest.getPageParam(), page.getTotal(), page.getPages(), responseList);
+    }
 
     @Override
     public NewPushResponse newPush(NewPushRequest newPushRequest, Long userId) {
