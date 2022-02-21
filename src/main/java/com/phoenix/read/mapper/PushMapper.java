@@ -20,4 +20,7 @@ public interface PushMapper extends MyMapper<Push> {
 
     @Select("SELECT id,title,pic,type,activityId FROM push WHERE activityType=#{activityType}")
     List<BriefPush> getPushList(@Param("activityType")Integer activityType);
+
+    @Select("SELECT id,title,pic,type,activityId FROM push WHERE activityId=#{activityId}")
+    List<BriefPush> getPushByActivityId(@Param("activityId")Long activityId);
 }

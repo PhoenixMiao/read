@@ -77,4 +77,10 @@ public class PushController {
         return Result.success(pushService.getPushListByActivityType(pageSize,pageNum,activityType));
     }
 
+    @GetMapping("/rolling")
+    @ApiOperation(value = "获得四张滚动图",response = BriefPush.class)
+    public Result getRollingAd(){
+        return Result.success(pushService.rollingAd());
+    }
+
 }

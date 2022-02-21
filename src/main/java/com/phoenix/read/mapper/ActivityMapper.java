@@ -37,4 +37,7 @@ public interface ActivityMapper extends MyMapper<Activity> {
 
     @Select("SELECT id,startTime,name FROM activity WHERE publisherId=#{publisherId}")
     List<BriefActivity> getBriefActivityListByPublisherId(@Param("publisherId")Long publisherId);
+
+    @Select("SELECT * FROM activity ORDER BY people desc")
+    List<Activity> getNotEndActivity();
 }

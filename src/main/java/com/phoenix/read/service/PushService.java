@@ -6,6 +6,8 @@ import com.phoenix.read.controller.response.NewPushResponse;
 import com.phoenix.read.dto.BriefPush;
 import com.phoenix.read.entity.Push;
 
+import java.util.List;
+
 public interface PushService {
     NewPushResponse newPush(NewPushRequest newPushRequest, Long userId);
 
@@ -14,4 +16,6 @@ public interface PushService {
     NewPushResponse summarizePush(NewPushRequest newPushRequest,Long userId);
 
     Page<BriefPush> getPushListByActivityType(int pageSize, int pageNum, Integer activityType);
+
+    List<BriefPush> rollingAd();
 }

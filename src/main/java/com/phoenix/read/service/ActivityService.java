@@ -3,6 +3,7 @@ package com.phoenix.read.service;
 import com.phoenix.read.common.Page;
 import com.phoenix.read.controller.request.UpdateActivityRequest;
 import com.phoenix.read.dto.BriefActivity;
+import com.phoenix.read.dto.BriefPush;
 import com.phoenix.read.entity.Activity;
 
 import java.util.List;
