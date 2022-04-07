@@ -15,12 +15,12 @@ import java.util.List;
 
 @Repository
 public interface ActivityMapper extends MyMapper<Activity> {
-    @Insert("INSERT INTO activity(type,publisherId) VALUES (#{type},#{publisherId});")
-    Long newActivity(@Param("type") Integer type, @Param("publisherId") Long publisherId);
+    @Insert("INSERT INTO activity(type,publisher_id) VALUES (#{type},#{publisher_id});")
+    Long newActivity(@Param("type") Integer type, @Param("publisher_id") Long publisherId);
 
-    @Update("UPDATE activity SET name=#{name},status=#{status},organizerId=#{organizerId},startTime=#{startTime},endTime=#{endTime},place=#{place},time=#{time},orderStartTime=#{orderStartTime},orderEndTime=#{orderEndTime},people=#{people},introduction=#{introduction},isCheck=#{isCheck} WHERE id=#{id};")
-    void updateActivity(@Param("name") String name, @Param("status") Integer status, @Param("organizerId") Long organizerId, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("place") String place, @Param("time") Integer time, @Param("orderStartTime") String orderStartTime, @Param("orderEndTime") String orderEndTime,
-                        @Param("people") Integer people, @Param("introduction") String introduction, @Param("isCheck") Integer isCheck);
+    @Update("UPDATE activity SET name=#{name},status=#{status},organizer_id=#{organizer_id},start_time=#{start_time},end_time=#{end_time},place=#{place},time=#{time},order_start_time=#{order_start_time},order_end_time=#{order_end_time},people=#{people},introduction=#{introduction},is_check=#{is_check} WHERE id=#{id};")
+    void updateActivity(@Param("name") String name, @Param("status") Integer status, @Param("organizer_id") Long organizerId, @Param("start_time") String startTime, @Param("end_time") String endTime, @Param("place") String place, @Param("time") Integer time, @Param("order_start_time") String orderStartTime, @Param("order_end_time") String orderEndTime,
+                        @Param("people") Integer people, @Param("introduction") String introduction, @Param("is_check") Integer isCheck);
 
 
     @Select("SELECT * FROM activity WHERE id=#{id}")
@@ -29,18 +29,18 @@ public interface ActivityMapper extends MyMapper<Activity> {
     @Update("UPDATE activity SET status=#{status} WHERE id=#{id};")
     void updateStatus(@Param("status") Integer status, @Param("id") Long id);
 
-    @Select("SELECT id,startTime,name FROM activity WHERE organizerId=#{organizerId}")
-    List<BriefActivity> getBriefActivityListByOrganizer(@Param("organizerId") Long organizerId);
+    @Select("SELECT id,start_time,name FROM activity WHERE organizer_id=#{organizer_id}")
+    List<BriefActivity> getBriefActivityListByOrganizer(@Param("organizer_id") Long organizerId);
 
     @Update("UPDATE activity SET people=#{people} WHERE id=#{id}")
     void makeOrder(@Param("people") Integer people, @Param("id") Long id);
 
-    @Select("SELECT id,startTime,name FROM activity WHERE publisherId=#{publisherId}")
-    List<BriefActivity> getBriefActivityListByPublisherId(@Param("publisherId") Long publisherId);
+    @Select("SELECT id,start_time,name FROM activity WHERE publisher_id=#{publisher_id}")
+    List<BriefActivity> getBriefActivityListByPublisherId(@Param("publisher_id") Long publisherId);
 
     @Select("SELECT * FROM activity ORDER BY people desc")
     List<Activity> getNotEndActivity();
 
-    @Select("SELECT id FROM activity WHERE publisherId=#{userId} OR organizerId=#{userId}")
-    List<Long> getRelevantActicityIdByUser(@Param("userId")Long userId);
+    @Select("SELECT id FROM activity WHERE publisherId=#{userId} OR organizerId=#{user_id}")
+    List<Long> getRelevantActicityIdByUser(@Param("user_id")Long userId);
 }

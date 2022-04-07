@@ -12,18 +12,18 @@ import java.util.List;
 
 @Repository
 public interface PushMapper extends MyMapper<Push> {
-    @Insert("INSERT INTO push(title,activityId,publishDate,content,type,picture,source,activityType) VALUES (#{title},#{activityId},#{publishDate},#{content},#{type},#{picture},#{source},#{activityType});")
-    Long newPush(@Param("title")String title,@Param("activityId")Long activityId,@Param("publishDate")String publishDate,@Param("content")String content,@Param("type")Integer type,@Param("picture")String picture,@Param("source")String source,@Param("activityType")Integer activityType);
+    @Insert("INSERT INTO push(title,activityId,publish_date,content,type,picture,source,activity_type) VALUES (#{title},#{activity_id},#{publish_date},#{content},#{type},#{picture},#{source},#{activity_type});")
+    Long newPush(@Param("title")String title,@Param("activity_id")Long activityId,@Param("publish_date")String publishDate,@Param("content")String content,@Param("type")Integer type,@Param("picture")String picture,@Param("source")String source,@Param("activity_type")Integer activityType);
 
     @Select("SELECT * FROM push WHERE id=#{id}")
     Push getPushById(@Param("id")Long id);
 
-    @Select("SELECT id,title,pic,type,activityId FROM push WHERE activityType=#{activityType}")
-    List<BriefPush> getPushList(@Param("activityType")Integer activityType);
+    @Select("SELECT id,title,pic,type,activity_id FROM push WHERE activity_type=#{activity_type}")
+    List<BriefPush> getPushList(@Param("activity_type")Integer activityType);
 
-    @Select("SELECT id,title,pic,type,activityId FROM push WHERE activityId=#{activityId}")
-    List<BriefPush> getPushByActivityId(@Param("activityId")Long activityId);
+    @Select("SELECT id,title,pic,type,activity_id FROM push WHERE activity_id=#{activity_id}")
+    List<BriefPush> getPushByActivityId(@Param("activity_id")Long activityId);
 
-    @Select("SELECT * FROM push WHERE activityId=#{activityId}")
-    List<Push> getPushListByActivityId(@Param("activityId")Long activityId);
+    @Select("SELECT * FROM push WHERE activity_id=#{activity_id}")
+    List<Push> getPushListByActivityId(@Param("activity_id")Long activityId);
 }

@@ -15,14 +15,14 @@ import java.util.List;
 
 @Repository
 public interface CommentMapper extends MyMapper<Comment> {
-    @Select("SELECT id FROM comment WHERE objectId=#{objectId} AND objectType=#{objectType}")
-    List<Long> getCommentList(@Param("objectId") Long objectId, @Param("objectType")Integer objectType);
+    @Select("SELECT id FROM comment WHERE object_id=#{object_id} AND object_type=#{object_type}")
+    List<Long> getCommentList(@Param("object_id") Long objectId, @Param("object_type")Integer objectType);
 
-    @Insert("INSERT INTO comment(objectId,objectType,userId,commentTime,comment) VALUES (#{objectId},#{objectType},#{userId},#{commentTime},#{comment}")
-    Long addComment(@Param("objectId")Long objectId,
-                    @Param("objectType") Integer objectType,
-                    @Param("userId") Long userId,
-                    @Param("commentTime") String commentTime,
+    @Insert("INSERT INTO comment(object_id,object_type,user_id,comment_time,comment) VALUES (#{object_id},#{object_type},#{user_id},#{comment_time},#{comment}")
+    Long addComment(@Param("object_id")Long objectId,
+                    @Param("object_type") Integer objectType,
+                    @Param("user_id") Long userId,
+                    @Param("comment_time") String commentTime,
                     @Param("comment") String comment
                     );
 
