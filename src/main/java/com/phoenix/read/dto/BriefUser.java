@@ -21,4 +21,7 @@ public class BriefUser {
 
     @ApiModelProperty("昵称")
     private String nickname;
+
+    @ApiModelProperty("头像")
+    private String portrait;
 }

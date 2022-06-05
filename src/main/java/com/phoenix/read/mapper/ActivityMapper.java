@@ -41,6 +41,6 @@ public interface ActivityMapper extends MyMapper<Activity> {
     @Select("SELECT * FROM activity ORDER BY people desc")
     List<Activity> getNotEndActivity();
 
-    @Select("SELECT id FROM activity WHERE publisherId=#{userId} OR organizerId=#{user_id}")
-    List<Long> getRelevantActicityIdByUser(@Param("user_id")Long userId);
+    @Select("SELECT id FROM activity WHERE publisher_id=#{userId} OR organizerId=#{user_id}")
+    List<Long> getRelevantActivityIdByUser(@Param("user_id")Long userId);
 }

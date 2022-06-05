@@ -26,4 +26,6 @@ public interface UserService {
     void UpdateUser(Long userId, UpdateUserRequest updateUserRequest);
 
     void classifyUser(Long organizerId,Long userId,Long adminId);
+
+    void mute(Long userId,Long adminId);
 }

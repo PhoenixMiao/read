@@ -12,4 +12,6 @@ public interface MemberService {
     Page<Order> getMemberListByUserId(int pageSize, int pageNum, Long userId);
 
     Member getMemberById(Long id);
+
+    void cancelOrder(Long id);
 }

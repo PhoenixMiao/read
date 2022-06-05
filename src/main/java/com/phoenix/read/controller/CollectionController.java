@@ -3,7 +3,6 @@ package com.phoenix.read.controller;
 import com.phoenix.read.annotation.Auth;
 import com.phoenix.read.common.Result;
 import com.phoenix.read.service.CollectionService;
-import com.phoenix.read.service.LikeService;
 import com.phoenix.read.util.SessionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

@@ -3,27 +3,17 @@ package com.phoenix.read.controller;
 import com.phoenix.read.annotation.Auth;
 import com.phoenix.read.common.CommonException;
 import com.phoenix.read.common.Result;
-import com.phoenix.read.controller.request.NewPushRequest;
-import com.phoenix.read.controller.response.NewPushResponse;
 import com.phoenix.read.service.MemberService;
 import com.phoenix.read.util.SessionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 @Api("成员相关操作")
 @RestController
@@ -47,6 +37,19 @@ public class MemberController {
         }catch (CommonException e){
             return Result.result(e.getCommonErrorCode());
         }
+    }
+
+    @Auth
+    @PostMapping("/cancel")
+    @ApiOperation(value = "预约活动", response = Long.class)
+    @ApiImplicitParam(name = "memberId", value = "活动id", required = true, paramType = "query", dataType = "Long")
+    public Result cancelOrder(@NotNull @RequestParam("memberId") Long memberId) {
+        try{
+            memberService.cancelOrder(memberId);
+        }catch (CommonException e){
+            return Result.result(e.getCommonErrorCode());
+        }
+        return Result.success("取消成功");
     }
 
     @Auth

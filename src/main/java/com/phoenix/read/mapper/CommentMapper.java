@@ -15,8 +15,8 @@ import java.util.List;
 
 @Repository
 public interface CommentMapper extends MyMapper<Comment> {
-    @Select("SELECT id FROM comment WHERE object_id=#{object_id} AND object_type=#{object_type}")
-    List<Long> getCommentList(@Param("object_id") Long objectId, @Param("object_type")Integer objectType);
+    @Select("SELECT * FROM comment WHERE object_id=#{object_id} AND object_type=#{object_type}")
+    List<Comment> getCommentList(@Param("object_id") Long objectId, @Param("object_type")Integer objectType);
 
     @Insert("INSERT INTO comment(object_id,object_type,user_id,comment_time,comment) VALUES (#{object_id},#{object_type},#{user_id},#{comment_time},#{comment}")
     Long addComment(@Param("object_id")Long objectId,

@@ -51,7 +51,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Page<BriefActivity> getBriefActivityByOrganizer(int pageSize,int pageNum,Long organizerId) {
-        PageHelper.startPage(pageNum,pageSize,"startTime desc");
+        PageHelper.startPage(pageNum,pageSize,"start_time desc");
         return new Page<>(new PageInfo<>(activityMapper.getBriefActivityListByOrganizer(organizerId)));
     }
 
@@ -59,7 +59,7 @@ public class ActivityServiceImpl implements ActivityService {
     public Page<BriefActivity> getBriefActivityByPublisher(int pageSize, int pageNum, Long publisherId) {
         User user = userMapper.selectByPrimaryKey(publisherId);
         if(user.getType()==0) throw new CommonException(CommonErrorCode.USER_NOT_ADMIN);
-        PageHelper.startPage(pageNum,pageSize,"startTime desc");
+        PageHelper.startPage(pageNum,pageSize,"start_time desc");
         return new Page<>(new PageInfo<>(activityMapper.getBriefActivityListByOrganizer(publisherId)));
 
     }

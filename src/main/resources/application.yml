@@ -24,8 +24,9 @@ spring:
     password: Lishuai0923
     timeout: 1000
 
-
-
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
 
 
 mini-app:

@@ -71,6 +71,19 @@ public class UserController {
     }
 
     @Auth
+    @GetMapping("/mute")
+    @ApiOperation(value = "管理员将别人禁言",response = Long.class)
+    @ApiImplicitParam(name = "userId",value = "所需要被设置的用户的id",required = true,paramType = "query")
+    public Result mute(@NotNull@RequestParam("userId")Long userId){
+        try{
+            userService.mute(userId,sessionUtils.getUserId());
+            return Result.success(userId);
+        }catch (CommonException e){
+            return Result.result(e.getCommonErrorCode());
+        }
+    }
+
+    @Auth
     @GetMapping("")
     @ApiOperation(value = "获取个人信息")
     public Result getUserById(){

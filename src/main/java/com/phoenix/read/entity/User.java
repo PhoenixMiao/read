@@ -1,12 +1,18 @@
 package com.phoenix.read.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 
 /**
@@ -22,6 +28,7 @@ public class User {
 
     @Id
     @ApiModelProperty("用户id")
+    @GeneratedValue(generator = "JDBC",strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ApiModelProperty("会话id")
@@ -80,5 +87,10 @@ public class User {
 
     @ApiModelProperty("主办方id")
     private Long organizerId;
+
+    @Version
+    @TableField(fill = FieldFill.INSERT)
+    @ApiModelProperty("用户信息乐观锁组件")
+    private Integer version;
 
 }

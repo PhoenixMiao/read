@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +20,7 @@ import org.springframework.data.annotation.Id;
 public class Passage {
     @Id
     @ApiModelProperty("id")
+    @GeneratedValue(generator = "JDBC",strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ApiModelProperty("类别 1:交流 2:答疑 3:综合")

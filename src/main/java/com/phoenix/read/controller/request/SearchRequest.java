@@ -28,7 +28,7 @@ public class SearchRequest {
     private String organizer;
 
     @ApiModelProperty("发布者")
-    private String pubisher;
+    private String publisher;
 
     @ApiModelProperty("标题")
     private String title;

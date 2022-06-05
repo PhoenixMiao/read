@@ -13,7 +13,11 @@ import java.util.List;
 
 @Repository
 public interface PassageMapper extends MyMapper<Passage> {
-    @Select("SELECT * FROM passage WHERE type=#{type} AND subtype=#{subtype}")
-    List<Passage> getPassageList(@Param("type") Integer type, @Param("subtype")Integer subtype);
+    @Select("SELECT * FROM passage LEFT JOIN (SELECT COUNT(*) AS times,object_id FROM comment WHERE object_type = 0 GROUP BY object_id)tmp ON passage.id = tmp.object_id WHERE type=#{type} AND subtype=#{subtype} ORDER BY times DESC")
+    List<Passage> getPassageListByHot(@Param("type") Integer type, @Param("subtype")Integer subtype);
+
+    @Select("SELECT * FROM passage WHERE type=#{type} AND subtype=#{subtype} ORDER BY publish_time DESC")
+    List<Passage> getPassageListByTime(@Param("type") Integer type, @Param("subtype")Integer subtype);
+
 }
 

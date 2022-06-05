@@ -1,5 +1,6 @@
 package com.phoenix.read.controller.response;
 
+import com.phoenix.read.entity.Comment;
 import com.phoenix.read.entity.Passage;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,6 +20,6 @@ public class GetPassageResponse {
     @ApiModelProperty("论坛")
     private Passage passage;
 
-    @ApiModelProperty("评论id列表")
-    private List<Long> commentsId;
+    @ApiModelProperty("评论列表")
+    private List<Comment> commentsId;
 }

@@ -27,13 +27,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment getCommentById(Long id){
-        Comment comment=commentMapper.selectByPrimaryKey(id);
-        return comment;
+        return commentMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public List<Long> getItsCommentsIdById(Long commentId){
-        return commentMapper.getCommentList(commentId,1);
+    public List<Comment> getCommentsIdByIdAndType (Long commentId,Integer commentType){
+        return commentMapper.getCommentList(commentId,commentType);
     }
 
     @Override
@@ -47,6 +46,8 @@ public class CommentServiceImpl implements CommentService {
         if(userMapper.selectByPrimaryKey(userId).getIsMute()==1){
             throw new CommonException(CommonErrorCode.USER_IS_MUTE);
         }
-        return commentMapper.addComment(commentRequest.getObjectId(),commentRequest.getObjectType(),userId,timeUtil.getCurrentTimestamp(),commentRequest.getComment());
+        Comment comment = Comment.builder().objectId(commentRequest.getObjectId()).objectType(commentRequest.getObjectType()).userId(userId).commentTime(TimeUtil.getCurrentTimestamp()).comment(commentRequest.getComment()).build();
+        commentMapper.insert(comment);
+        return comment.getId();
     }
 }

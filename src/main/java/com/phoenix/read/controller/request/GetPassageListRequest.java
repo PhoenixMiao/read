@@ -1,11 +1,15 @@
 package com.phoenix.read.controller.request;
 
+import com.phoenix.read.common.PageParam;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Data
 @AllArgsConstructor
@@ -20,5 +24,11 @@ public class GetPassageListRequest {
     private Integer subtype;
 
     @ApiModelProperty("排序顺序 1:最新 2:热门")
+    @Min(value = 1, message = "order字段必须为1或2")
+    @Max(value = 2, message = "order字段必须为1或2")
     private Integer order;
+
+    @ApiModelProperty("分页参数")
+    private PageParam pageParam;
+
 }

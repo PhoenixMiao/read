@@ -10,11 +10,8 @@ import com.phoenix.read.controller.request.PostRequest;
 import com.phoenix.read.controller.request.SearchRequest;
 import com.phoenix.read.controller.response.GetPassageResponse;
 import com.phoenix.read.dto.BriefPassage;
-import com.phoenix.read.dto.BriefPush;
+import com.phoenix.read.entity.Comment;
 import com.phoenix.read.entity.Passage;
-import com.phoenix.read.entity.PassageOrderByCommentNumber;
-import com.phoenix.read.entity.PassageOrderByPublishTime;
-import com.phoenix.read.entity.Push;
 import com.phoenix.read.mapper.CommentMapper;
 import com.phoenix.read.mapper.PassageMapper;
 import com.phoenix.read.mapper.UserMapper;
@@ -88,19 +85,17 @@ public class PassageServiceImpl implements PassageService {
     }
 
     @Override
-    public List<Passage> getPassageList(GetPassageListRequest getPassageListRequest){
-        List<Passage> passageList=passageMapper.getPassageList(getPassageListRequest.getType(),getPassageListRequest.getSubtype());
-        if(getPassageListRequest.getOrder().equals(2))passageList.sort(new PassageOrderByCommentNumber());
-        else if(getPassageListRequest.getOrder().equals(1))passageList.sort(new PassageOrderByPublishTime());
-        return passageList;
+    public Page<Passage> getPassageList(GetPassageListRequest getPassageListRequest){
+        PageHelper.startPage(getPassageListRequest.getPageParam().getPageNum(),getPassageListRequest.getPageParam().getPageSize(),getPassageListRequest.getPageParam().getOrderBy());
+        if(getPassageListRequest.getOrder().equals(2)) return new Page(new PageInfo<>(passageMapper.getPassageListByHot(getPassageListRequest.getType(),getPassageListRequest.getSubtype())));
+        else return new Page(new PageInfo<>(passageMapper.getPassageListByTime(getPassageListRequest.getType(),getPassageListRequest.getSubtype())));
     }
 
     @Override
     public GetPassageResponse getPassageById(Long passageId){
-        List<Long> commentsId=commentMapper.getCommentList(passageId,0);
+        List<Comment> commentsId=commentMapper.getCommentList(passageId,0);
         Passage passage=passageMapper.selectByPrimaryKey(passageId);
-        GetPassageResponse getPassageResponse=new GetPassageResponse(passage,commentsId);
-        return getPassageResponse;
+        return new GetPassageResponse(passage,commentsId);
     }
 
     @Override

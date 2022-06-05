@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface PassageService {
 
-    List<Passage> getPassageList(GetPassageListRequest getPassageListRequest);
+    Page<Passage> getPassageList(GetPassageListRequest getPassageListRequest);
 
     GetPassageResponse getPassageById(Long passageId);
 

@@ -59,14 +59,14 @@ public class PushServiceImpl implements PushService {
 
         Example exampleTwo = new Example(User.class);
 
-        if (!StringUtils.isEmpty(searchRequest.getPubisher())) {
+        if (!StringUtils.isEmpty(searchRequest.getPublisher())) {
             Example.Criteria nameCriteria = exampleTwo.createCriteria();
-            nameCriteria.orLike("nickname", "%" + searchRequest.getPubisher() + "%");
+            nameCriteria.orLike("nickname", "%" + searchRequest.getPublisher() + "%");
             exampleTwo.and(nameCriteria);
         }
         if (!StringUtils.isEmpty(searchRequest.getOrganizer())) {
             Example.Criteria nameCriteria = exampleTwo.createCriteria();
-            nameCriteria.orLike("nickname", "%" + searchRequest.getPubisher() + "%");
+            nameCriteria.orLike("nickname", "%" + searchRequest.getPublisher() + "%");
             exampleTwo.and(nameCriteria);
         }
         PageHelper.startPage(searchRequest.getPageParam().getPageNum(),
@@ -75,7 +75,7 @@ public class PushServiceImpl implements PushService {
         List<User> userList = userMapper.selectByExample(exampleTwo);
         List<Long> activityIdList=new ArrayList<>();
         for(User user:userList){
-            activityIdList.addAll(activityMapper.getRelevantActicityIdByUser(user.getId()));
+            activityIdList.addAll(activityMapper.getRelevantActivityIdByUser(user.getId()));
         }
         List<Push> pushListTwo=new ArrayList<>();
         for(Long activityId:activityIdList){
@@ -114,7 +114,7 @@ public class PushServiceImpl implements PushService {
 
     @Override
     public Page<BriefPush> getPushListByActivityType(int pageSize, int pageNum, Integer activityType) {
-        PageHelper.startPage(pageNum,pageSize,"publishDate desc");
+        PageHelper.startPage(pageNum,pageSize,"publish_date desc");
         //todo 用了一个返回体里没有的东西，如果不行的话就改到SQL语句里
         return new Page<>(new PageInfo<>(pushMapper.getPushList(activityType)));
     }
@@ -123,7 +123,7 @@ public class PushServiceImpl implements PushService {
     public List<BriefPush> rollingAd() {
         ArrayList<BriefPush> briefPushes = new ArrayList<>();
         for(int i=1;briefPushes.size()<4||i<10;i++) {
-            PageHelper.startPage(i, 10, "endTime");
+            PageHelper.startPage(i, 10, "end_time desc");
             //todo 分页总顺序按截止时间拍，拍完取出页来，每一页中按参与人数拍，不知道能不能做到
             Page<Activity> ActivityPage = new Page<Activity>(new PageInfo<Activity>(activityMapper.getNotEndActivity()));
             for (Activity ele : ActivityPage.getList()) {
@@ -156,7 +156,7 @@ public class PushServiceImpl implements PushService {
 
     @Override
     public Push getPushById(Long pushId) {
-        return pushMapper.getPushById(pushId);
+        return pushMapper.selectByPrimaryKey(pushId);
     }
 
 }

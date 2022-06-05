@@ -18,5 +18,5 @@ public interface CommentService {
 
     Long addComment(CommentRequest commentRequest,Long userId);
 
-    List<Long> getItsCommentsIdById(Long commentId);
+    List<Comment> getCommentsIdByIdAndType(Long commentId,Integer commentType);
 }

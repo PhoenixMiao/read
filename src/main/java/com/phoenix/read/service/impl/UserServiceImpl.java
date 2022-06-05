@@ -145,5 +145,14 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public void mute(Long userId,Long adminId){
+        if(userMapper.selectByPrimaryKey(adminId).getType()<1) throw new CommonException(CommonErrorCode.USER_NOT_ADMIN);
+        if(userMapper.selectByPrimaryKey(userId)==null) throw new CommonException(CommonErrorCode.USER_NOT_EXIST);
+        userMapper.updateByPrimaryKeySelective(User.builder().id(userId).isMute(1).build());
+        new MemberThead(TimeUtil.getCurrentTimestamp(),2,userId).updateStatus();
+    }
+
+
 
 }

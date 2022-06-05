@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @NoArgsConstructor
@@ -17,10 +20,11 @@ import org.springframework.data.annotation.Id;
 public class Member {
     @Id
     @ApiModelProperty("id")
+    @GeneratedValue(generator = "JDBC",strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ApiModelProperty("活动id")
-    private Long acivityId;
+    private Long activityId;
 
     @ApiModelProperty("参与成员id")
     private Long userId;

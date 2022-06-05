@@ -15,6 +15,7 @@ import com.phoenix.read.mapper.MemberMapper;
 import com.phoenix.read.mapper.OrganizerMapper;
 import com.phoenix.read.mapper.UserMapper;
 import com.phoenix.read.service.MemberService;
+import com.phoenix.read.util.SpringContextUtil;
 import com.phoenix.read.util.TimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void check(Long id) {
         Member member = memberMapper.selectByPrimaryKey(id);
-        Activity activity = activityMapper.selectByPrimaryKey(member.getAcivityId());
+        Activity activity = activityMapper.selectByPrimaryKey(member.getActivityId());
         if(activity.getType()==-1) throw new CommonException(CommonErrorCode.ACTIVITY_HAS_END);
         memberMapper.updateStatus(1,id);
     }
@@ -68,7 +69,7 @@ public class MemberServiceImpl implements MemberService {
         Page page = new Page(new PageInfo<>(memberList));
         ArrayList<Order> orderArrayList = new ArrayList<>();
         for(Member ele:memberList){
-            Activity activity = activityMapper.selectByPrimaryKey(ele.getAcivityId());
+            Activity activity = activityMapper.selectByPrimaryKey(ele.getActivityId());
             orderArrayList.add(new Order(ele.getId(),activity.getName(),organizerMapper.selectByPrimaryKey(activity.getOrganizerId()).getName(),userMapper.selectByPrimaryKey(activity.getPublisherId()).getName(),activity.getStartTime(),activity.getStatus()));
         }
         orderArrayList.sort(new Comparator<Order>(){
@@ -83,6 +84,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member getMemberById(Long id) {
         return memberMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public void cancelOrder(Long id){
+        Member member = memberMapper.selectByPrimaryKey(id);
+        if(member==null) throw new CommonException(CommonErrorCode.NOT_ORDERED);
+        if(activityMapper.selectByPrimaryKey(member.getActivityId()).getStatus()!=0) throw new CommonException(CommonErrorCode.CAN_NOT_ORDER);
+        memberMapper.deleteByPrimaryKey(id);
     }
 }
 
@@ -116,73 +125,129 @@ class MemberThead {
 
 class OrderStart extends TimerTask {
 
-    @Autowired
     private ActivityMapper activityMapper;
 
     private Long id;
 
     public OrderStart(Long id){
+        super();
+        activityMapper = SpringContextUtil.getBean("ActivityMapper");
         this.id = id;
     }
 
-    public void run() {
-        activityMapper.updateStatus(0,id);
+    public OrderStart(){
+        super();
     }
+
+
+    @Override
+    public void run() {
+        try {
+            if (activityMapper == null) {  //这个判断是用老方法@Autowired注入的时候 报空指针 测试的时候在这儿判断了一下 是因为service空 没有成功注入 所有service/dao注入需要SpringContextUtil.getBean才可以
+                System.out.println("---> null");
+            }
+            this.activityMapper.updateStatus(0,this.id);//这里 调用service的业务逻辑
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 class ActivityStart extends TimerTask {
-
-    @Autowired
     private ActivityMapper activityMapper;
 
     private Long id;
 
     public ActivityStart(Long id){
+        super();
+        activityMapper = SpringContextUtil.getBean("ActivityMapper");
         this.id = id;
     }
 
+    public ActivityStart(){
+        super();
+    }
+
+
+    @Override
     public void run() {
-        activityMapper.updateStatus(1,id);
+        try {
+            if (activityMapper == null) {  //这个判断是用老方法@Autowired注入的时候 报空指针 测试的时候在这儿判断了一下 是因为service空 没有成功注入 所有service/dao注入需要SpringContextUtil.getBean才可以
+                System.out.println("---> null");
+            }
+            this.activityMapper.updateStatus(1,this.id);//这里 调用service的业务逻辑
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
 class ActivityEnd extends TimerTask {
-
-    @Autowired
     private ActivityMapper activityMapper;
-
-    @Autowired
     private MemberMapper memberMapper;
 
     private Long id;
 
     public ActivityEnd(Long id){
+        super();
+        activityMapper = SpringContextUtil.getBean("ActivityMapper");
+        memberMapper = SpringContextUtil.getBean("MemberMapper");
         this.id = id;
     }
 
+    public ActivityEnd(){
+        super();
+    }
+
+    @Override
     public void run() {
-        activityMapper.updateStatus(-1,id);
-        if(activityMapper.selectByPrimaryKey(id).getIsCheck()==1){
-            List<Member> memberList = memberMapper.getUncommittedMemberList(id,0);
-            for(Member ele:memberList){
-                memberMapper.updateStatus(-1,ele.getId());
+        try {
+            if (this.activityMapper == null) {  //这个判断是用老方法@Autowired注入的时候 报空指针 测试的时候在这儿判断了一下 是因为service空 没有成功注入 所有service/dao注入需要SpringContextUtil.getBean才可以
+                System.out.println("---> null");
             }
+            this.activityMapper.updateStatus(-1,this.id);
+            if(this.activityMapper.selectByPrimaryKey(this.id).getIsCheck()==1){
+                List<Member> memberList = this.memberMapper.getUncommittedMemberList(this.id,0);
+                for(Member ele:memberList){
+                    this.memberMapper.updateStatus(-1,ele.getId());
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
 
 class Mute extends TimerTask {
-
-    @Autowired
     private UserMapper userMapper;
 
     private Long id;
 
     public Mute(Long id){
+        super();
+        userMapper = SpringContextUtil.getBean("UserMapper");
         this.id = id;
     }
 
+    public Mute(){
+        super();
+    }
+
+
+    @Override
     public void run() {
-        userMapper.muteUser(0,id);
+        try {
+            if (userMapper == null) {  //这个判断是用老方法@Autowired注入的时候 报空指针 测试的时候在这儿判断了一下 是因为service空 没有成功注入 所有service/dao注入需要SpringContextUtil.getBean才可以
+                System.out.println("---> null");
+            }
+            this.userMapper.muteUser(0,this.id);//这里 调用service的业务逻辑
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

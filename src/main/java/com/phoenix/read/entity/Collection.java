@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 
 /**
@@ -22,6 +25,7 @@ import org.springframework.data.annotation.Id;
 public class Collection {
     @Id
     @ApiModelProperty("id")
+    @GeneratedValue(generator = "JDBC",strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ApiModelProperty("用户id")

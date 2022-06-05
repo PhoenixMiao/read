@@ -31,4 +31,5 @@ public class OrganizerController {
         if(name==null) return Result.success(organizerService.getOrganizerList());
         else return Result.success(organizerService.getOrganizerListByName(name));
     }
+
 }

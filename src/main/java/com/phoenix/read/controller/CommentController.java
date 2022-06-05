@@ -11,6 +11,7 @@ import com.phoenix.read.service.CommentService;
 import com.phoenix.read.util.SessionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -39,10 +40,15 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    @ApiOperation(value = "获取评论的评论id列表", response = Long.class)
-    @ApiImplicitParam(name = "commentId", value = "评论id", required = true, paramType = "query", dataType = "Long")
-    public Result getCommentsById(@NotNull @RequestParam("commentId") Long commentId) {
-        return Result.success(commentService.getItsCommentsIdById(commentId));
+    @ApiOperation(value = "获取评论列表", response = Comment.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "objectId", value = "对象id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "objectType",value = "0为文章评论，1为对评论的评论", required = true, paramType = "query", dataType = "Integer")
+
+    })
+    public Result getCommentsById(@NotNull @RequestParam("objectId") Long objectId,
+                                  @NotNull @RequestParam("objectType") Integer objectType) {
+        return Result.success(commentService.getCommentsIdByIdAndType(objectId,objectType));
     }
 
     @Auth
