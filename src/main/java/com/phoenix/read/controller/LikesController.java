@@ -33,7 +33,7 @@ public class LikesController {
     @GetMapping("")
     @ApiOperation(value = "点赞", response = Long.class)
     @ApiImplicitParam(name = "passageId", value = "论坛id", required = true, paramType = "query", dataType = "Long")
-    public Result Like(@NotNull @RequestParam("passageId") Long passageId) {
+    public Result like(@NotNull @RequestParam("passageId") Long passageId) {
         Long userId = sessionUtils.getUserId();
         return Result.success(likesService.like(passageId, userId));
     }
@@ -46,7 +46,7 @@ public class LikesController {
     public Result isLike(@NotNull @RequestParam("passageId") Long passageId) {
         Long userId = sessionUtils.getUserId();
         try {
-            return Result.success(likesService.like(passageId, userId));
+            return Result.success(likesService.isLike(passageId, userId));
         } catch (CommonException e) {
             return Result.result(e.getCommonErrorCode());
         }

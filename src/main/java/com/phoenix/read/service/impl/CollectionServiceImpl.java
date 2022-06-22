@@ -1,5 +1,6 @@
 package com.phoenix.read.service.impl;
 
+import com.phoenix.read.common.CommonException;
 import com.phoenix.read.entity.Collection;
 import com.phoenix.read.mapper.CollectionMapper;
 import com.phoenix.read.service.CollectionService;
@@ -17,15 +18,22 @@ public class CollectionServiceImpl implements CollectionService {
     private TimeUtil timeUtil;
 
     @Override
-    public Long collect(Long passageId,Long userId){
-        Collection collection=new Collection(null,userId,passageId,timeUtil.getCurrentTimestamp());
-        collectionMapper.insert(collection);
-        return collection.getId();
+    public Long collect(Long passageId,Long userId) throws CommonException {
+        Collection collections = collectionMapper.isCollect(userId,passageId);
+        if(collections ==null) {
+            Collection collections2 = new Collection(null, userId, passageId, TimeUtil.getCurrentTimestamp());
+            collectionMapper.insert(collections2);
+            return collections2.getId();
+        }else{
+            collectionMapper.deleteByPrimaryKey(collections.getId());
+            return collections.getId();
+        }
+
     }
 
     @Override
-    public  String cancelCollection(Long id){
-        collectionMapper.deleteByPrimaryKey(id);
-        return "取消收藏成功";
+    public Integer isCollect(Long userId,Long passageId){
+        if(collectionMapper.isCollect(userId,passageId)!=null) return 1;
+        else return 0;
     }
 }

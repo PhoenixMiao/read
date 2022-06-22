@@ -10,11 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LikesMapper extends MyMapper<Likes> {
 
-    @Insert("INSERT INTO likes(user_id,passage_id) VALUES (#{user_id},#{passage_id}")
-    Long like(@Param("user_id")Long userId,
-                    @Param("passage_id") Long passageId
-    );
-
     @Select("SELECT * FROM likes WHERE user_id = #{userId} AND passage_id = #{passageId} LIMIT 1")
     Likes isLike(@Param("userId")Long userId, @Param("passageId")Long passageId);
 }

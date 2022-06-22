@@ -223,6 +223,11 @@ class ActivityEnd extends TimerTask {
 }
 
 class Mute extends TimerTask {
+
+    public static void main(String[] args) {
+        System.out.println(SpringContextUtil.getBean("UserMapper").toString());
+    }
+
     private UserMapper userMapper;
 
     private Long id;

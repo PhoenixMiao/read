@@ -1,6 +1,7 @@
 package com.phoenix.read.controller;
 
 import com.phoenix.read.annotation.Auth;
+import com.phoenix.read.common.CommonException;
 import com.phoenix.read.common.Result;
 import com.phoenix.read.service.CollectionService;
 import com.phoenix.read.util.SessionUtils;
@@ -32,16 +33,22 @@ public class CollectionController {
     @GetMapping("")
     @ApiOperation(value = "收藏", response = Long.class)
     @ApiImplicitParam(name = "passageId", value = "论坛id", required = true, paramType = "query", dataType = "Long")
-    public Result Like(@NotNull @RequestParam("passageId") Long passageId) {
-        Long userId=sessionUtils.getUserId();
-        return Result.success(collectionService.collect(passageId,userId));
+    public Result collect(@NotNull @RequestParam("passageId") Long passageId) {
+        Long userId = sessionUtils.getUserId();
+        return Result.success(collectionService.collect(passageId, userId));
     }
 
+
     @Auth
-    @GetMapping("/cancel")
-    @ApiOperation(value = "取消收藏", response = String.class)
-    @ApiImplicitParam(name = "collectionId", value = "收藏id", required = true, paramType = "query", dataType = "Long")
-    public Result cancelLike(@NotNull @RequestParam("collectionId") Long collectionId) {
-        return Result.success(collectionService.cancelCollection(collectionId));
+    @GetMapping("/check")
+    @ApiOperation(value = "验证是否已经收藏", response = Long.class)
+    @ApiImplicitParam(name = "passageId", value = "文章id", required = true, paramType = "query", dataType = "Long")
+    public Result isCollect(@NotNull @RequestParam("passageId") Long passageId) {
+        Long userId = sessionUtils.getUserId();
+        try {
+            return Result.success(collectionService.isCollect(passageId, userId));
+        } catch (CommonException e) {
+            return Result.result(e.getCommonErrorCode());
+        }
     }
 }
