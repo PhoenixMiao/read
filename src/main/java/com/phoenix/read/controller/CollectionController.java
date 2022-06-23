@@ -2,6 +2,7 @@ package com.phoenix.read.controller;
 
 import com.phoenix.read.annotation.Auth;
 import com.phoenix.read.common.CommonException;
+import com.phoenix.read.common.PageParam;
 import com.phoenix.read.common.Result;
 import com.phoenix.read.service.CollectionService;
 import com.phoenix.read.util.SessionUtils;
@@ -10,11 +11,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Api("收藏相关操作")
@@ -50,5 +49,13 @@ public class CollectionController {
         } catch (CommonException e) {
             return Result.result(e.getCommonErrorCode());
         }
+    }
+
+    @Auth
+    @PostMapping("/list")
+    @ApiOperation(value = "获取收藏列表", response = Long.class)
+    public Result list(@NotNull @Valid @RequestBody PageParam pageParam) {
+        Long userId = sessionUtils.getUserId();
+        return Result.success(collectionService.getCollectionList(userId,pageParam));
     }
 }
