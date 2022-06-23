@@ -20,9 +20,6 @@ public class CommentServiceImpl implements CommentService {
     private CommentMapper commentMapper;
 
     @Autowired
-    private TimeUtil timeUtil;
-
-    @Autowired
     private UserMapper userMapper;
 
     @Override

@@ -14,8 +14,6 @@ public class CollectionServiceImpl implements CollectionService {
     @Autowired
     private CollectionMapper collectionMapper;
 
-    @Autowired
-    private TimeUtil timeUtil;
 
     @Override
     public Long collect(Long passageId,Long userId) throws CommonException {
