@@ -34,7 +34,7 @@ public class CollectionController {
     @ApiImplicitParam(name = "passageId", value = "论坛id", required = true, paramType = "query", dataType = "Long")
     public Result collect(@NotNull @RequestParam("passageId") Long passageId) {
         Long userId = sessionUtils.getUserId();
-        return Result.success(collectionService.collect(passageId, userId));
+        return Result.success(collectionService.collect(userId,passageId));
     }
 
 
@@ -45,7 +45,7 @@ public class CollectionController {
     public Result isCollect(@NotNull @RequestParam("passageId") Long passageId) {
         Long userId = sessionUtils.getUserId();
         try {
-            return Result.success(collectionService.isCollect(passageId, userId));
+            return Result.success(collectionService.isCollect(userId,passageId));
         } catch (CommonException e) {
             return Result.result(e.getCommonErrorCode());
         }

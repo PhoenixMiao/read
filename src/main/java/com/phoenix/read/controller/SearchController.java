@@ -31,8 +31,8 @@ public class SearchController {
     @PostMapping("/condition")
     @ApiOperation(value = "根据条件筛选信息")
     public Object search(@NotNull @Valid @RequestBody SearchRequest searchRequest) {
-        if(searchRequest.getType()==1) return pushService.searchPush(searchRequest);
-        if(searchRequest.getType()==2) return passageService.searchPassage(searchRequest);
+        if(searchRequest.getType()==1) return passageService.searchPassage(searchRequest);
+        if(searchRequest.getType()==2) return pushService.searchPush(searchRequest);
         return "type值必须为1或2";
     }
 }

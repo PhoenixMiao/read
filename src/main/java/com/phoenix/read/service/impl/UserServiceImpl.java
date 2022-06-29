@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
                 .isMute(0)
                 .nickname("花狮用户")
                 .build();
-
+        userMapper.insert(user);
 
         return new SessionData(user);
     }

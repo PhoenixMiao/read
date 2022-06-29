@@ -52,6 +52,12 @@ public class PushServiceImpl implements PushService {
             exampleOne.and(nameCriteria);
         }
 
+        if (!StringUtils.isEmpty(searchRequest.getContent())){
+            Example.Criteria contentCriteria = exampleOne.createCriteria();
+            contentCriteria.orLike("content","%" + searchRequest.getContent() + "%");
+            exampleOne.and(contentCriteria);
+        }
+
         PageHelper.startPage(searchRequest.getPageParam().getPageNum(),
                 searchRequest.getPageParam().getPageSize(),
                 searchRequest.getPageParam().getOrderBy());
@@ -69,9 +75,6 @@ public class PushServiceImpl implements PushService {
             nameCriteria.orLike("nickname", "%" + searchRequest.getPublisher() + "%");
             exampleTwo.and(nameCriteria);
         }
-        PageHelper.startPage(searchRequest.getPageParam().getPageNum(),
-                searchRequest.getPageParam().getPageSize(),
-                searchRequest.getPageParam().getOrderBy());
         List<User> userList = userMapper.selectByExample(exampleTwo);
         List<Long> activityIdList=new ArrayList<>();
         for(User user:userList){

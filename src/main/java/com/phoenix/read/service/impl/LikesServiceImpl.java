@@ -8,6 +8,8 @@ import com.phoenix.read.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LikesServiceImpl implements LikesService {
 
@@ -16,21 +18,24 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public Long like(Long passageId,Long userId) throws CommonException {
-        Likes likes = likesMapper.isLike(userId,passageId);
-        if(likes ==null) {
+        List<Likes> likes = likesMapper.isLike(userId,passageId);
+        if(likes.size() == 0) {
             Likes likes2 = new Likes(null, userId, passageId, TimeUtil.getCurrentTimestamp());
             likesMapper.insert(likes2);
-            return likes2.getId();
+            return (long)1;
         }else{
-            likesMapper.deleteByPrimaryKey(likes.getId());
-            return likes.getId();
+            for(Likes like:likes){
+                likesMapper.deleteByPrimaryKey(like.getId());
+            }
+            return (long)0;
         }
 
     }
 
     @Override
     public Integer isLike(Long userId,Long passageId){
-        if(likesMapper.isLike(userId,passageId)!=null) return 1;
+        List<Likes> likes = likesMapper.isLike(userId,passageId);
+        if(likes.size() == 0)  return 1;
         else return 0;
     }
 }
