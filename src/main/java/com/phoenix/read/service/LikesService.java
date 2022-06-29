@@ -4,5 +4,5 @@ public interface LikesService {
 
     Long like(Long passageId,Long userId);
 
-    Integer isLike(Long userId,Long passageId);
+    Integer isLike(Long passageId,Long userId);
 }

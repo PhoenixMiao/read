@@ -46,7 +46,7 @@ public class LikesController {
     public Result isLike(@NotNull @RequestParam("passageId") Long passageId) {
         Long userId = sessionUtils.getUserId();
         try {
-            return Result.success(likesService.isLike(userId, passageId));
+            return Result.success(likesService.isLike(passageId, userId));
         } catch (CommonException e) {
             return Result.result(e.getCommonErrorCode());
         }

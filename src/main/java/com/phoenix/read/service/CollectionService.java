@@ -8,7 +8,7 @@ import com.phoenix.read.entity.Collection;
 public interface CollectionService {
     Long collect(Long passageId,Long userId);
 
-    Integer isCollect(Long userId,Long passageId);
+    Integer isCollect(Long passageId,Long userId);
 
     Page<CollectionResult> getCollectionList(Long userId, PageParam pageParam);
 }

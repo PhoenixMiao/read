@@ -18,7 +18,7 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public Long like(Long passageId,Long userId) throws CommonException {
-        List<Likes> likes = likesMapper.isLike(userId,passageId);
+        List<Likes> likes = likesMapper.isLike(passageId,userId);
         if(likes.size() == 0) {
             Likes likes2 = new Likes(null, userId, passageId, TimeUtil.getCurrentTimestamp());
             likesMapper.insert(likes2);
@@ -33,8 +33,8 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
-    public Integer isLike(Long userId,Long passageId){
-        List<Likes> likes = likesMapper.isLike(userId,passageId);
+    public Integer isLike(Long passageId,Long userId){
+        List<Likes> likes = likesMapper.isLike(passageId, userId);
         if(likes.size() == 0)  return 1;
         else return 0;
     }

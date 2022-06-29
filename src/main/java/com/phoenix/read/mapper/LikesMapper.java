@@ -13,5 +13,5 @@ import java.util.List;
 public interface LikesMapper extends MyMapper<Likes> {
 
     @Select("SELECT * FROM likes WHERE user_id = #{userId} AND passage_id = #{passageId}")
-    List<Likes> isLike(@Param("userId")Long userId, @Param("passageId")Long passageId);
+    List<Likes> isLike(@Param("passageId")Long passageId,@Param("userId")Long userId);
 }
