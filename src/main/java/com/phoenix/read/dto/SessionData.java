@@ -77,21 +77,23 @@ public class SessionData implements Serializable {
 
     public SessionData(User user){
         AssertUtil.notNull(user, CommonErrorCode.USER_NOT_EXIST);
-//        if(user == null){
-//            create_time = TimeUtil.getCurrentTimestamp();
-//            nickname = "读书汇用户";
-//            gender = 0;
-//            return;
-//        }
+        if(user == null){
+            createTime = TimeUtil.getCurrentTimestamp();
+            nickname = "读书汇用户";
+            gender = 0;
+            return;
+        }
         id = user.getId();
         sessionId = user.getSessionId();
         createTime = user.getCreateTime();
         nickname = user.getNickname();
+        name = user.getName();
         gender = user.getGender();
         department = user.getDepartment();
         major = user.getMajor();
         grade = user.getGrade();
         telephone = user.getTelephone();
+
         wechatNum = user.getWechatNum();
         QQ = user.getQQ();
         portrait = user.getPortrait();

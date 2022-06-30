@@ -33,6 +33,9 @@ public enum CommonErrorCode {
     HAS_LIKED(2012,"该用户已经对该文章点过赞","该用户已经对该文章点过赞"),
     NOT_ORDERED(2013,"该用户尚未进行预约","请先进行预约再取消预约"),
     CAN_NOT_ORDER(2014,"该活动已经超过预约时段","不能再对该活动预约或取消预约"),
+    HAVE_WRITTEN_STUID_AND_NAME(2015,"已经填写过学号和姓名了","不能再次填写了"),
+    UPLOAD_FILE_FAIL(2016,"上传文件失败","请检查网络状况后稍后重试"),
+    FILENAME_CAN_NOT_BE_NULL(2017,"文件名不能为空","请取一个有后缀的文件名"),
     ;
 
     /**

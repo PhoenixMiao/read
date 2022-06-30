@@ -5,6 +5,8 @@ import com.phoenix.read.controller.request.UpdateUserRequest;
 import com.phoenix.read.dto.BriefUser;
 import com.phoenix.read.dto.SessionData;
 import com.phoenix.read.entity.User;
+import com.qcloud.cos.model.UploadResult;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     /**
@@ -17,6 +19,8 @@ public interface UserService {
 
     Page<BriefUser> getBriefUserList(int pageSize, int pageNum,Long userId);
 
+    Long inputStuIdAndName(Long userId,String studentId,String name);
+
     void toAdmin(Long userId,Long adminId);
 
     void backToUser(Long userId,Long adminId);
@@ -28,4 +32,6 @@ public interface UserService {
     void classifyUser(Long organizerId,Long userId,Long adminId);
 
     void mute(Long userId,Long adminId);
+
+    String uploadPortrait(Long userId, MultipartFile multipartFile);
 }

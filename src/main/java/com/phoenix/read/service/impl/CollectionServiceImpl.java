@@ -29,13 +29,14 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Long collect(Long passageId,Long userId) throws CommonException {
-        Collection collections = collectionMapper.isCollect(passageId, userId);
-        if(collections ==null) {
+        List<Collection> collections = collectionMapper.isCollect(passageId, userId);
+        if(collections.size() == 0) {
             Collection collections2 = new Collection(null, userId, passageId, TimeUtil.getCurrentTimestamp());
             collectionMapper.insert(collections2);
             return (long)1;
         }else{
-            collectionMapper.deleteByPrimaryKey(collections.getId());
+            for(Collection collection:collections)
+                collectionMapper.deleteByPrimaryKey(collection.getId());
             return (long)0;
         }
 
@@ -43,7 +44,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Integer isCollect(Long passageId,Long userId){
-        if(collectionMapper.isCollect(passageId,userId)!=null) return 1;
+        if(collectionMapper.isCollect(passageId,userId).size()!=0) return 1;
         else return 0;
     }
 

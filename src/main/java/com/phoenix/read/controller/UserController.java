@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -124,6 +125,34 @@ public class UserController {
             userService.classifyUser(organizerId,userId,sessionUtils.getUserId());
             return Result.success(userId);
         }catch (CommonException e){
+            return Result.result(e.getCommonErrorCode());
+        }
+    }
+
+    @Auth
+    @PostMapping("/stu")
+    @ApiOperation(value = "填写学号和姓名",response = SessionData.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "studentId",value = "学号",required = true,paramType = "query"),
+            @ApiImplicitParam(name = "name",value = "姓名",required = true,paramType = "query"),
+    })
+    public Result student(@NotNull @RequestParam("studentId")String stuId,
+                          @NotNull @RequestParam("name")String name){
+        try{
+            userService.inputStuIdAndName(sessionUtils.getUserId(),stuId,name);
+            return Result.success(sessionUtils.getSessionData());
+        }catch (CommonException e){
+            return Result.result(e.getCommonErrorCode());
+        }
+    }
+
+    @Auth
+    @PostMapping(value = "/upload", produces = "application/json")
+    @ApiOperation(value = "上传用户头像")
+    public Result uploadPortrait(MultipartFile file) {
+        try {
+            return Result.success(userService.uploadPortrait(sessionUtils.getUserId(),file));
+        } catch (CommonException e) {
             return Result.result(e.getCommonErrorCode());
         }
     }

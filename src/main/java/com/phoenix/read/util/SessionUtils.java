@@ -55,7 +55,6 @@ public class SessionUtils {
             sessionData = (SessionData) redisUtil.get(key);
         }catch (Exception e){
             return getSessionDataFromDB(key);
-
         }
         if(sessionData != null)return sessionData;
         return getSessionDataFromDB(key);
