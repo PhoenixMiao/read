@@ -37,4 +37,7 @@ public class UpdateUserRequest {
 
     @ApiModelProperty("头像")
     private String portrait;
+
+    @ApiModelProperty("性别")
+    private int gender;
 }

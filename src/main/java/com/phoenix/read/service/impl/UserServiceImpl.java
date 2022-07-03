@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserService {
                 .sessionKey(wxSession.getSessionKey())
                 .sessionId(sessionId)
                 .type(0)
+                .gender(0)
                 .isMute(0)
                 .nickname("花狮用户")
                 .build();
@@ -125,11 +126,9 @@ public class UserServiceImpl implements UserService {
         if(user.getName()!=null && user.getStudentId() != null){
             throw new CommonException(CommonErrorCode.HAVE_WRITTEN_STUID_AND_NAME);
         }
-        userMapper.updateByPrimaryKey(User.builder()
-                .id(userId)
-                .name(name)
-                .studentId(studentId)
-                .build());
+        user.setName(name);
+        user.setStudentId(studentId);
+        userMapper.updateByPrimaryKeySelective(user);
         user = userMapper.selectByPrimaryKey(userId);
         redisUtil.del(user.getSessionId());
         redisUtil.set(user.getSessionId(),new SessionData(user));
@@ -143,7 +142,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void UpdateUser(Long userId, UpdateUserRequest updateUserRequest) {
-        userMapper.updateUser(updateUserRequest.getNickname(),updateUserRequest.getDepartment(),updateUserRequest.getMajor(),updateUserRequest.getGrade(),updateUserRequest.getTelephone(),updateUserRequest.getQQ(),updateUserRequest.getWechatNum(),updateUserRequest.getPortrait(),userId);
+        userMapper.updateUser(updateUserRequest.getNickname(),updateUserRequest.getDepartment(),updateUserRequest.getMajor(),updateUserRequest.getGrade(),updateUserRequest.getTelephone(),updateUserRequest.getQQ(),updateUserRequest.getGender(),updateUserRequest.getWechatNum(),updateUserRequest.getPortrait(),userId);
     }
 
     @Override

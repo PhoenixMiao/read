@@ -140,7 +140,7 @@ public class UserController {
                           @NotNull @RequestParam("name")String name){
         try{
             userService.inputStuIdAndName(sessionUtils.getUserId(),stuId,name);
-            return Result.success(sessionUtils.getSessionData());
+            return Result.success(userService.getUserById(sessionUtils.getUserId()));
         }catch (CommonException e){
             return Result.result(e.getCommonErrorCode());
         }
