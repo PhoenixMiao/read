@@ -21,7 +21,7 @@ public class BriefPush {
     private String title;
 
     @ApiModelProperty("图片")
-    private String pic;
+    private String picture;
 
     @ApiModelProperty("分类（0为预告，1为总结）")
     private Integer type;
@@ -35,7 +35,7 @@ public class BriefPush {
     public BriefPush(Long id, String title, String pic, Integer type, Long activityId) {
         this.id = id;
         this.title = title;
-        this.pic = pic;
+        this.picture = pic;
         this.type = type;
         this.activityId = activityId;
     }

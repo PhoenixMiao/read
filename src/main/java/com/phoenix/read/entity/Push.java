@@ -39,7 +39,7 @@ public class Push {
     private String content;
 
     @ApiModelProperty("类型")
-    private int type;
+    private Integer type;
 
     @ApiModelProperty("图片")
     private String picture;

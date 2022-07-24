@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.phoenix.read.common.*;
 import com.phoenix.read.config.YmlConfig;
 import com.phoenix.read.controller.request.UpdateUserRequest;
+import com.phoenix.read.controller.response.UserResponse;
 import com.phoenix.read.dto.BriefUser;
 import com.phoenix.read.dto.SessionData;
 import com.phoenix.read.dto.WxSession;
@@ -142,7 +143,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void UpdateUser(Long userId, UpdateUserRequest updateUserRequest) {
-        userMapper.updateUser(updateUserRequest.getNickname(),updateUserRequest.getDepartment(),updateUserRequest.getMajor(),updateUserRequest.getGrade(),updateUserRequest.getTelephone(),updateUserRequest.getQQ(),updateUserRequest.getGender(),updateUserRequest.getWechatNum(),updateUserRequest.getPortrait(),userId);
+        userMapper.updateUser(updateUserRequest.getNickname(),updateUserRequest.getDepartment(),updateUserRequest.getMajor(),updateUserRequest.getGrade(),updateUserRequest.getTelephone(),updateUserRequest.getQQ(),updateUserRequest.getGender(),updateUserRequest.getWechatNum(),userId);
     }
 
     @Override
@@ -239,6 +240,13 @@ public class UserServiceImpl implements UserService {
         transferManager.shutdownNow(true);
 
         return res;
+    }
+
+    @Override
+    public UserResponse getUser(Long userId) throws CommonException{
+        User user = userMapper.selectByPrimaryKey(userId);
+        if(user==null) throw new CommonException(CommonErrorCode.USER_NOT_EXIST);
+        return UserResponse.builder().userId(userId).nickname(user.getNickname()).portrait(user.getPortrait()).build();
     }
 
 

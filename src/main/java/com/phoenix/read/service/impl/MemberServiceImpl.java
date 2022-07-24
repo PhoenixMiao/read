@@ -15,7 +15,7 @@ import com.phoenix.read.mapper.MemberMapper;
 import com.phoenix.read.mapper.OrganizerMapper;
 import com.phoenix.read.mapper.UserMapper;
 import com.phoenix.read.service.MemberService;
-import com.phoenix.read.util.SpringContextUtil;
+import com.phoenix.read.util.SpringApplicationContextHolder;
 import com.phoenix.read.util.TimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
         ArrayList<Order> orderArrayList = new ArrayList<>();
         for(Member ele:memberList){
             Activity activity = activityMapper.selectByPrimaryKey(ele.getActivityId());
-            orderArrayList.add(new Order(ele.getId(),activity.getName(),organizerMapper.selectByPrimaryKey(activity.getOrganizerId()).getName(),userMapper.selectByPrimaryKey(activity.getPublisherId()).getName(),activity.getStartTime(),activity.getStatus()));
+            orderArrayList.add(new Order(ele.getId(),activity.getName(),ele.getActivityId(),organizerMapper.selectByPrimaryKey(activity.getOrganizerId()).getName(),userMapper.selectByPrimaryKey(activity.getPublisherId()).getName(),activity.getStartTime(),activity.getStatus()));
         }
         orderArrayList.sort(new Comparator<Order>(){
             @Override
@@ -131,7 +131,7 @@ class OrderStart extends TimerTask {
 
     public OrderStart(Long id){
         super();
-        activityMapper = SpringContextUtil.getBean("ActivityMapper");
+        activityMapper = (ActivityMapper) SpringApplicationContextHolder.getBean("activityMapper");
         this.id = id;
     }
 
@@ -162,7 +162,7 @@ class ActivityStart extends TimerTask {
 
     public ActivityStart(Long id){
         super();
-        activityMapper = SpringContextUtil.getBean("ActivityMapper");
+        activityMapper = (ActivityMapper) SpringApplicationContextHolder.getBean("activityMapper");
         this.id = id;
     }
 
@@ -193,8 +193,8 @@ class ActivityEnd extends TimerTask {
 
     public ActivityEnd(Long id){
         super();
-        activityMapper = SpringContextUtil.getBean("ActivityMapper");
-        memberMapper = SpringContextUtil.getBean("MemberMapper");
+        activityMapper = (ActivityMapper) SpringApplicationContextHolder.getBean("activityMapper");
+        memberMapper = (MemberMapper) SpringApplicationContextHolder.getBean("memberMapper");
         this.id = id;
     }
 
@@ -224,9 +224,9 @@ class ActivityEnd extends TimerTask {
 
 class Mute extends TimerTask {
 
-    public static void main(String[] args) {
-        System.out.println(SpringContextUtil.getBean("UserMapper").toString());
-    }
+//    public static void main(String[] args) {
+//        System.out.println(SpringContextUtil.getBean("userMapper").toString());
+//    }
 
     private UserMapper userMapper;
 
@@ -234,7 +234,7 @@ class Mute extends TimerTask {
 
     public Mute(Long id){
         super();
-        userMapper = SpringContextUtil.getBean("UserMapper");
+        userMapper = (UserMapper) SpringApplicationContextHolder.getBean("userMapper");
         this.id = id;
     }
 

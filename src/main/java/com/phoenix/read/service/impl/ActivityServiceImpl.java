@@ -30,8 +30,9 @@ public class ActivityServiceImpl implements ActivityService {
     public void updateActivity(UpdateActivityRequest updateActivityRequest, Long userId) {
         User user = userMapper.selectByPrimaryKey(userId);
         Activity activity = activityMapper.getActivityById(updateActivityRequest.getId());
+        if(activity==null) throw new CommonException(CommonErrorCode.ACTIVITY_NOT_EXIST);
         if(user.getType()==0) throw new CommonException(CommonErrorCode.USER_NOT_ADMIN);
-        if(user.getId()!=activity.getPublisherId()) throw new CommonException((CommonErrorCode.ADMIN_NOT_SAME));
+        //if(!user.getId().equals(activity.getPublisherId())) throw new CommonException((CommonErrorCode.ADMIN_NOT_SAME));
         if(updateActivityRequest.getOrderEndTime().compareTo(TimeUtil.getCurrentTimestamp())<0) throw new CommonException(CommonErrorCode.ORDER_HAS_END);
         int status = 0;
         if(updateActivityRequest.getOrderStartTime().compareTo(TimeUtil.getCurrentTimestamp())>0){
@@ -40,13 +41,13 @@ public class ActivityServiceImpl implements ActivityService {
         }
         new MemberThead(updateActivityRequest.getStartTime(),1,updateActivityRequest.getId()).updateStatus();
         new MemberThead(updateActivityRequest.getEndTime(),-1,updateActivityRequest.getId()).updateStatus();
-        activityMapper.updateActivity(updateActivityRequest.getName(),status,updateActivityRequest.getOrganizerId(),updateActivityRequest.getStartTime(),updateActivityRequest.getEndTime(),updateActivityRequest.getPlace(), DatesUtil.hourDiff(updateActivityRequest.getStartTime(),updateActivityRequest.getEndTime()),updateActivityRequest.getOrderStartTime(),updateActivityRequest.getOrderEndTime(),0,updateActivityRequest.getIntroduction(),updateActivityRequest.getIsCheck());
+        activityMapper.updateActivity(updateActivityRequest.getName(),status,updateActivityRequest.getOrganizerId(),updateActivityRequest.getStartTime(),updateActivityRequest.getEndTime(),updateActivityRequest.getPlace(), DatesUtil.hourDiff(updateActivityRequest.getStartTime(),updateActivityRequest.getEndTime()),updateActivityRequest.getOrderStartTime(),updateActivityRequest.getOrderEndTime(),0,updateActivityRequest.getIntroduction(),updateActivityRequest.getIsCheck(), activity.getId());
     }
 
 
     @Override
     public Activity getActivityById(Long id){
-        return activityMapper.getActivityById(id);
+        return activityMapper.selectByPrimaryKey(id);
     }
 
     @Override

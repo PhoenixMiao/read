@@ -4,6 +4,7 @@ import com.phoenix.read.annotation.Auth;
 import com.phoenix.read.common.CommonException;
 import com.phoenix.read.common.Result;
 import com.phoenix.read.controller.request.UpdateUserRequest;
+import com.phoenix.read.controller.response.UserResponse;
 import com.phoenix.read.dto.BriefUser;
 import com.phoenix.read.dto.SessionData;
 import com.phoenix.read.service.UserService;
@@ -146,14 +147,28 @@ public class UserController {
         }
     }
 
+
+    @Auth
+    @GetMapping("/mes")
+    @ApiOperation(value = "根据userId获取昵称和头像",response = UserResponse.class)
+    @ApiImplicitParam(name = "userId",value = "所需要被设置的用户的id",required = true,paramType = "query")
+    public Result getUser(@NotNull @RequestParam("userId")String userId){
+        try{
+            return Result.success(userService.getUser(Long.parseLong(userId)));
+        }catch (CommonException e){
+            return Result.result(e.getCommonErrorCode());
+        }
+    }
+
     @Auth
     @PostMapping(value = "/upload", produces = "application/json")
     @ApiOperation(value = "上传用户头像")
-    public Result uploadPortrait(MultipartFile file) {
-        try {
-            return Result.success(userService.uploadPortrait(sessionUtils.getUserId(),file));
-        } catch (CommonException e) {
+    public Object uploadPortrait(MultipartFile file) {
+        try{
+            return Result.success(userService.uploadPortrait(sessionUtils.getUserId(), file));
+        }catch (CommonException e){
             return Result.result(e.getCommonErrorCode());
         }
+
     }
 }

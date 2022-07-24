@@ -32,7 +32,7 @@ public class TimeUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(getCurrentTimestampForWxSend(getCurrentTimestamp()));
+        System.out.println((getCurrentTimestamp()));
     }
 
 }

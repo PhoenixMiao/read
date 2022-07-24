@@ -35,9 +35,6 @@ public class UpdateUserRequest {
     @ApiModelProperty("微信号")
     private String wechatNum;
 
-    @ApiModelProperty("头像")
-    private String portrait;
-
     @ApiModelProperty("性别")
     private int gender;
 }

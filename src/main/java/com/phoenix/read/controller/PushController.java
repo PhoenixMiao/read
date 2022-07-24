@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -69,7 +70,7 @@ public class PushController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageSize",value = "每页显示数量 (不小于0)",required = true,paramType = "query",dataType = "Integer"),
             @ApiImplicitParam(name = "pageNum", value = "页数 (不小于0)", required = true, paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "activityType",value = "主办方id",required = true,paramType = "query",dataType = "Long"),
+            @ApiImplicitParam(name = "activityType",value = "活动类型",required = true,paramType = "query",dataType = "Integer"),
     })
     public Result getBriefPushList(@NotNull @RequestParam("pageSize")Integer pageSize,
                                    @NotNull @RequestParam("pageNum")Integer pageNum,
@@ -81,6 +82,18 @@ public class PushController {
     @ApiOperation(value = "获得四张滚动图",response = BriefPush.class)
     public Result getRollingAd(){
         return Result.success(pushService.rollingAd());
+    }
+
+    @Auth
+    @PostMapping(value = "/upload", produces = "application/json")
+    @ApiOperation(value = "上传推送图片")
+    public Object uploadPushPicture(MultipartFile file) {
+        try{
+            return Result.success(pushService.uploadPicture(sessionUtils.getUserId(), file));
+        }catch (CommonException e){
+            return Result.result(e.getCommonErrorCode());
+        }
+
     }
 
 }

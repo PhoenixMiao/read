@@ -6,6 +6,7 @@ import com.phoenix.read.controller.request.SearchRequest;
 import com.phoenix.read.controller.response.NewPushResponse;
 import com.phoenix.read.dto.BriefPush;
 import com.phoenix.read.entity.Push;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface PushService {
     List<BriefPush> rollingAd();
 
     Page<BriefPush> searchPush(SearchRequest searchRequest);
+
+    String uploadPicture(Long pushId, MultipartFile multipartFile);
 }

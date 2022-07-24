@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel("NewActivityRequest 补全新活动的相关信息")
 public class UpdateActivityRequest {
     @ApiModelProperty("活动id")
+    @NotNull
     private Long id;
 
     @ApiModelProperty("活动名称")

@@ -19,6 +19,9 @@ public class Order {
     @ApiModelProperty("活动名称")
     private String name;
 
+    @ApiModelProperty("活动id")
+    private Long activityId;
+
     @ApiModelProperty("主办方")
     private String organizer;
 

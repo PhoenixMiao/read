@@ -36,6 +36,7 @@ public enum CommonErrorCode {
     HAVE_WRITTEN_STUID_AND_NAME(2015,"已经填写过学号和姓名了","不能再次填写了"),
     UPLOAD_FILE_FAIL(2016,"上传文件失败","请检查网络状况后稍后重试"),
     FILENAME_CAN_NOT_BE_NULL(2017,"文件名不能为空","请取一个有后缀的文件名"),
+    ACTIVITY_NOT_EXIST(2018,"活动并不存在","请输入正确的活动id"),
     ;
 
     /**

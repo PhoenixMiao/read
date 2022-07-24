@@ -55,9 +55,10 @@ public class MemberController {
     @Auth
     @PostMapping("/check")
     @ApiOperation(value = "活动签到")
-    public Result check(){
+    @ApiImplicitParam(name = "id",value = "memberId",required = true,paramType = "query",dataType = "Long")
+    public Result check(@NotNull @RequestParam("memberId")Long memberId){
         try{
-            memberService.check(sessionUtils.getUserId());
+            memberService.check(memberId);
             return Result.success("签到成功");
         }catch (CommonException e){
             return Result.result(e.getCommonErrorCode());
@@ -67,7 +68,7 @@ public class MemberController {
     @Auth
     @GetMapping("")
     @ApiOperation(value = "根据id获取参与情况详情(包括userId和activityId)")
-    @ApiImplicitParam(name = "id",value = "memberId",required = true,paramType = "query",dataType = "Member")
+    @ApiImplicitParam(name = "id",value = "memberId",required = true,paramType = "query",dataType = "Long")
     public Result getMemberById(@NotNull @RequestParam("id")Long id){
         return Result.success(memberService.getMemberById(id));
     }

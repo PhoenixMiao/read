@@ -23,12 +23,6 @@ public class NewPushRequest {
     @ApiModelProperty("类型(0:人文 1:社科 2:理工 3:其他)")
     private int type;
 
-    @ApiModelProperty("图片")
-    private String picture;
-
-    @ApiModelProperty("来源")
-    private String source;
-
     @ApiModelProperty("活动id（活动预告推送不用填写）")
     private Long activityId;
 }

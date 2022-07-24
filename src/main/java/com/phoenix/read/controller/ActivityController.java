@@ -47,7 +47,7 @@ public class ActivityController {
 
     @GetMapping("")
     @ApiOperation(value = "获取活动详情", response = Push.class)
-    @ApiImplicitParam(name = "pushId", value = "活动id", required = true, paramType = "query", dataType = "Long")
+    @ApiImplicitParam(name = "activityId", value = "活动id", required = true, paramType = "query", dataType = "Long")
     public Result getPushById(@NotNull @RequestParam("activityId") Long activityId) {
         return Result.success(activityService.getActivityById(activityId));
     }

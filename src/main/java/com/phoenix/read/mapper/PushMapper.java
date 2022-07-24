@@ -12,9 +12,6 @@ import java.util.List;
 
 @Repository
 public interface PushMapper extends MyMapper<Push> {
-    @Insert("INSERT INTO push(title,activityId,publish_date,content,type,picture,source,activity_type) VALUES (#{title},#{activity_id},#{publish_date},#{content},#{type},#{picture},#{source},#{activity_type});")
-    Long newPush(@Param("title")String title,@Param("activity_id")Long activityId,@Param("publish_date")String publishDate,@Param("content")String content,@Param("type")Integer type,@Param("picture")String picture,@Param("source")String source,@Param("activity_type")Integer activityType);
-
     @Select("SELECT id,title,picture,type,activity_id FROM push WHERE activity_type=#{activity_type}")
     List<BriefPush> getPushList(@Param("activity_type")Integer activityType);
 

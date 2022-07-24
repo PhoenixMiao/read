@@ -18,17 +18,27 @@ import com.phoenix.read.mapper.ActivityMapper;
 import com.phoenix.read.mapper.PushMapper;
 import com.phoenix.read.mapper.UserMapper;
 import com.phoenix.read.service.PushService;
+import com.phoenix.read.util.AssertUtil;
 import com.phoenix.read.util.TimeUtil;
+import com.qcloud.cos.COSClient;
+import com.qcloud.cos.model.ObjectMetadata;
+import com.qcloud.cos.model.PutObjectRequest;
+import com.qcloud.cos.model.UploadResult;
+import com.qcloud.cos.transfer.TransferManager;
+import com.qcloud.cos.transfer.Upload;
 import io.netty.channel.socket.ChannelOutputShutdownEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.phoenix.read.common.CommonConstants.COS_BUCKET_NAME;
 
 @Service
 public class PushServiceImpl implements PushService {
@@ -41,6 +51,12 @@ public class PushServiceImpl implements PushService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private COSClient cosClient;
+
+    @Autowired
+    private TransferManager transferManager;
 
     @Override
     public Page<BriefPush> searchPush(SearchRequest searchRequest){
@@ -102,8 +118,22 @@ public class PushServiceImpl implements PushService {
     public NewPushResponse newPush(NewPushRequest newPushRequest, Long userId) {
         User user = userMapper.selectByPrimaryKey(userId);
         if(user.getType()==0) throw new CommonException(CommonErrorCode.USER_NOT_ADMIN);
-        Long activityId = activityMapper.newActivity(newPushRequest.getType(),userId);
-        Long pushId = pushMapper.newPush(newPushRequest.getTitle(),activityId,TimeUtil.getCurrentTimestamp(),newPushRequest.getContent(),0,newPushRequest.getPicture(),newPushRequest.getSource(),newPushRequest.getType());
+        Activity activity = Activity.builder()
+                .type(newPushRequest.getType())
+                .publisherId(userId)
+                .build();
+        activityMapper.insert(activity);
+        Long activityId = activity.getId();
+        Push push = Push.builder()
+                .activityId(activityId)
+                .title(newPushRequest.getTitle())
+                .publishDate(TimeUtil.getCurrentTimestamp())
+                .type(0)
+                .content(newPushRequest.getContent())
+                .activityType(newPushRequest.getType())
+                .build();
+        pushMapper.insert(push);
+        Long pushId = push.getId();
         return new NewPushResponse(pushId,activityId);
     }
 
@@ -111,7 +141,16 @@ public class PushServiceImpl implements PushService {
     public NewPushResponse summarizePush(NewPushRequest newPushRequest,Long userId){
         User user = userMapper.selectByPrimaryKey(userId);
         if(user.getType()==0) throw new CommonException(CommonErrorCode.USER_NOT_ADMIN);
-        Long pushId = pushMapper.newPush(newPushRequest.getTitle(),newPushRequest.getActivityId(),TimeUtil.getCurrentTimestamp(),newPushRequest.getContent(),1,newPushRequest.getPicture(),newPushRequest.getSource(),activityMapper.selectByPrimaryKey(activityMapper).getType());
+        Push push = Push.builder()
+                .activityId(newPushRequest.getActivityId())
+                .title(newPushRequest.getTitle())
+                .publishDate(TimeUtil.getCurrentTimestamp())
+                .type(1)
+                .content(newPushRequest.getContent())
+                .activityType(newPushRequest.getType())
+                .build();
+        pushMapper.insert(push);
+        Long pushId = push.getId();
         return new NewPushResponse(pushId,newPushRequest.getActivityId());
     }
 
@@ -147,7 +186,7 @@ public class PushServiceImpl implements PushService {
                                          }
                         );
                         int j = 0;
-                        while (j < 4 && activityMapper.selectByPrimaryKey(briefPushes.get(j)).getPeople() < ele.getPeople())
+                        while (j < 4 && activityMapper.selectByPrimaryKey(briefPushes.get(j).getActivityId()).getPeople() < ele.getPeople())
                             j++;
                         if (j != 0) briefPushes.set(j - 1, briefPush);
                     }
@@ -162,4 +201,54 @@ public class PushServiceImpl implements PushService {
         return pushMapper.selectByPrimaryKey(pushId);
     }
 
+    @Override
+    public String uploadPicture(Long pushId, MultipartFile multipartFile) throws CommonException{
+
+        Push push = pushMapper.selectByPrimaryKey(pushId);
+        String picture = push.getPicture();
+
+        try{
+            if(picture!=null){
+                cosClient.deleteObject(COS_BUCKET_NAME,picture.substring(picture.indexOf("push")));
+            }
+        }catch (Exception e){
+            throw new CommonException(CommonErrorCode.UPLOAD_FILE_FAIL);
+        }
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(multipartFile.getSize());
+
+        UploadResult uploadResult = null;
+        String res = null;
+
+        try {
+
+            String name = multipartFile.getOriginalFilename();
+            AssertUtil.notNull(name,CommonErrorCode.FILENAME_CAN_NOT_BE_NULL);
+            String extension = name.substring(name.lastIndexOf("."));
+
+            PutObjectRequest putObjectRequest = new PutObjectRequest(COS_BUCKET_NAME, "push"+pushId + extension, multipartFile.getInputStream(), objectMetadata);
+
+            // 高级接口会返回一个异步结果Upload
+            // 可同步地调用 waitForUploadResult 方法等待上传完成，成功返回UploadResult, 失败抛出异常
+            Upload upload = transferManager.upload(putObjectRequest);
+            uploadResult = upload.waitForUploadResult();
+
+            res =  cosClient.getObjectUrl(COS_BUCKET_NAME,"push"+pushId).toString()+extension;
+
+            push.setPicture(res);
+
+            pushMapper.updateByPrimaryKeySelective(push);
+
+        } catch (Exception e){
+            //e.printStackTrace();
+            throw new CommonException(CommonErrorCode.UPLOAD_FILE_FAIL);
+        }
+
+        // 确定本进程不再使用 transferManager 实例之后，关闭之
+        // 详细代码参见本页：高级接口 -> 关闭 TransferManager
+        transferManager.shutdownNow(true);
+
+        return res;
+    }
 }
